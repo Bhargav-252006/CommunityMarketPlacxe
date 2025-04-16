@@ -16,7 +16,3 @@ services:
       - key: ENFORCE_SSL
         value: true
     autoDeploy: true
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=31536000 
