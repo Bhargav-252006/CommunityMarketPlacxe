@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include('./partials/vendor/sidebar.ejs') %>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9 col-lg-10 main-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Orders Management</h2>
+                        </div>
+
+                        <!-- Filter and Search Section -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <select class="form-select" id="statusFilter">
+                                            <option value="all">All Statuses</option>
+                                            <% orderStatuses.forEach(status=> { %>
+                                                <option value="<%= status %>">
+                                                    <%= status %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-select" id="timeFilter">
+                                            <option value="all">All Time</option>
+                                            <option value="today">Today</option>
+                                            <option value="week">This Week</option>
+                                            <option value="month">This Month</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search orders...">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders Table Section -->
+                        <div class="card">
+                            <div class="card-body">
+                                <% if (orders && orders.length> 0) { %>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Order ID</th>
+                                                    <th>Date</th>
+                                                    <th>Customer</th>
+                                                    <th>Items</th>
+                                                    <th>Status</th>
+                                                    <th>Group Order</th>
+                                                    <th>Total</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% orders.forEach(order=> { %>
+                                                    <tr data-order-id="<%= order._id %>">
+                                                        <td>#<%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                                        </td>
+                                                        <td>
+                                                            <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                        </td>
+                                                        <td>
+                                                            <% if (order.customerId) { %>
+                                                                <%= order.customerId.name %>
+                                                                    <small class="d-block text-muted">
+                                                                        <%= order.customerId.email %>
+                                                                    </small>
+                                                                    <% } else { %>
+                                                                        Unknown Customer
+                                                                        <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.items.length %> items
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge status-badge status-<%= order.status %>">
+                                                                <%= order.status %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if (order.isGroupOrder && order.groupOrderId) { %>
+                                                                <span class="badge bg-info">
+                                                                    Group #<%=
+                                                                        order.groupOrderId._id.toString().substring(0,
+                                                                        6) %>
+                                                                </span>
+                                                                <% } else { %>
+                                                                    <span class="badge bg-secondary">Individual</span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td>₹<%= order.totalAmount.toFixed(2) %>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <a href="/vendor/orders/view/<%= order._id %>"
+                                                                    class="btn btn-sm btn-primary">
+                                                                    <i class="fas fa-eye"></i> View
+                                                                </a>
+                                                                <% if (order.status==='Pending' ) { %>
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-success ms-1"
+                                                                        onclick="updateOrderStatus('<%= order._id %>', 'Processing')">
+                                                                        <i class="fas fa-check"></i> Accept
+                                                                    </button>
+                                                                    <% } %>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i> No orders found. Check back later!
+                                        </div>
+                                        <% } %>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <%- include('./partials/vendor/scripts.ejs') %>
+
+            <script>
+                // Function to update order status
+                function updateOrderStatus(orderId, newStatus) {
+                    if (confirm('Are you sure you want to update this order to ' + newStatus + '?')) {
+                        // Create a form dynamically
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/vendor/orders/update-status/' + orderId;
+
+                        // Create hidden input for status
+                        const statusInput = document.createElement('input');
+                        statusInput.type = 'hidden';
+                        statusInput.name = 'status';
+                        statusInput.value = newStatus;
+
+                        // Append input to form
+                        form.appendChild(statusInput);
+
+                        // Append form to body and submit
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                }
+
+                // Filter orders by status
+                document.getElementById('statusFilter').addEventListener('change', function () {
+                    const status = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('tbody tr');
+
+                    rows.forEach(row => {
+                        const rowStatus = row.querySelector('.status-badge').textContent.trim().toLowerCase();
+                        if (status === 'all' || rowStatus === status) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
+    </body>
+
+</html>

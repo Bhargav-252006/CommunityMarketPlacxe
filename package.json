@@ -1,0 +1,39 @@
+{
+  "name": "communitymarketplace",
+  "version": "1.0.0",
+  "description": "Community Marketplace Platform",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Team 4",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "restart": "node scripts/restart.js",
+    "db:cleanup": "node scripts/cleanupMismatchedItems.js",
+    "db:cleanup:confirm": "node scripts/cleanupMismatchedItems.js --confirm",
+    "db:check": "node scripts/dbMaintenance.js check",
+    "db:fix": "node scripts/dbMaintenance.js fix --confirm",
+    "db:stats": "node scripts/dbMaintenance.js stats",
+    "db:optimize": "node scripts/dbMaintenance.js optimize --confirm",
+    "db:images": "node scripts/getVendorItemImages.js",
+    "db:update-images": "node scripts/updateItemImages.js"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {}
+}

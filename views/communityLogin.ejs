@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Login - Community Marketplace</title>
+    <%- include('partials/favicon') %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff9900; /* Amazon-inspired orange */
+            --secondary-color: #146eb4; /* Amazon-inspired blue */
+            --accent-color: #232f3e; /* Amazon-inspired dark blue/black */
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #6c757d;
+            --success: #007600; /* Amazon-inspired green */
+            --border-color: #ddd;
+            --hover-color: #febd69; /* Amazon-inspired hover orange */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f3f3f3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+            height: auto;
+        }
+
+        .login-banner {
+            flex: 1.2;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(20, 110, 180, 0.85) 0%, rgba(35, 47, 62, 0.9) 100%);
+            z-index: 0;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+            margin-right: 15px;
+            font-size: 2.7rem;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .login-banner h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-banner p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-form {
+            flex: 0.8;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-header h2 {
+            color: var(--dark-text);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-text);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.2);
+            outline: none;
+        }
+
+        .form-text {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin: -10px 0 15px;
+        }
+
+        .forgot-password a {
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .forgot-password a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider::before {
+            margin-right: 10px;
+        }
+
+        .divider::after {
+            margin-left: 10px;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .login-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            margin: 0 5px;
+            display: inline-block;
+        }
+
+        .login-footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .security-notice {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .security-notice i {
+            color: var(--success);
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            accent-color: var(--primary-color);
+        }
+
+        .remember-me label {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        /* Admin key modal styles */
+        .modal-content {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            border: none;
+            padding: 15px 20px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 15px 20px;
+        }
+
+        .modal-footer .btn {
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-weight: 500;
+        }
+
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: var(--dark-text);
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5e5e5;
+            color: var(--dark-text);
+        }
+
+        .input-group .btn {
+            border-radius: 0 4px 4px 0;
+            background-color: #f0f0f0;
+            color: var(--light-text);
+            border: 1px solid var(--border-color);
+            border-left: none;
+        }
+
+        .input-group .btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+
+            .login-banner,
+            .login-form {
+                flex: none;
+            }
+
+            .login-banner {
+                padding: 30px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-banner">
+            <div class="banner-content">
+                <div class="logo-area">
+                    <div class="logo">
+                        <i class="fas fa-store"></i> Community<span>Market</span>
+                    </div>
+                    <div class="tagline">Your neighborhood marketplace</div>
+                </div>
+                <h1>Welcome to Your Community</h1>
+                <p>Access your favorite local products, support neighborhood vendors, and enjoy the convenience of community shopping.</p>
+                <div class="community-features">
+                    <div class="feature">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span>Shop from local vendors</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span>Support your community</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-truck"></i>
+                        <span>Convenient delivery options</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Community Login</h2>
+                <p>Sign in to your community account</p>
+            </div>
+
+            <%- include('partials/messages') %>
+
+            <form action="/community/login" method="POST" id="communityLoginForm" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="communityId" class="form-label">Select Community</label>
+                    <select id="communityId" name="communityId" class="form-control" required>
+                        <option value="">-- Select Community --</option>
+                        <% if (communities && communities.length > 0) { %>
+                            <% communities.forEach(function(community) { %>
+                                <option value="<%= community._id %>"><%= community.name %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <div class="invalid-feedback">Please select a community.</div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email or Username</label>
+                    <input type="text" id="email" name="email" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your email or username.</div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+                
+                <div class="login-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="divider">or</div>
+
+            <div class="login-footer">
+                <p>Don't have an account?</p>
+                <a href="/community/register"><i class="fas fa-user-plus"></i> Register now</a>
+                <a href="/vendor/login"><i class="fas fa-store"></i> Login as vendor</a>
+                <a href="/community/create"><i class="fas fa-building"></i> Create a new community</a>
+            </div>
+
+            <div class="security-notice">
+                <i class="fas fa-lock"></i>
+                <span>Secure login protected by industry standard encryption</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Wait for document to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get references to important elements
+            const loginForm = document.querySelector('form[action="/community/login"]');
+            const adminKeyModal = new bootstrap.Modal(document.getElementById('adminKeyModal'));
+            let savedFormData = null;
+            let communityName = '';
+            
+            // Setup password toggle functionality
+            const setupPasswordToggle = (buttonId, inputId) => {
+                const toggleBtn = document.getElementById(buttonId);
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', function() {
+                        const input = document.getElementById(inputId);
+                        if (input) {
+                            if (input.type === 'password') {
+                                input.type = 'text';
+                                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                            } else {
+                                input.type = 'password';
+                                this.innerHTML = '<i class="fas fa-eye"></i>';
+                            }
+                        }
+                    });
+                }
+            };
+            
+            // Setup both password toggles
+            setupPasswordToggle('togglePassword', 'password');
+            setupPasswordToggle('toggleAdminKeyModal', 'adminKeyInput');
+            
+            // Add whitespace validation to inputs
+            const addWhitespaceValidation = (input) => {
+                if (!input) return;
+                
+                input.addEventListener('input', function() {
+                    if (this.value.startsWith(' ')) {
+                        this.setCustomValidity('Input cannot start with spaces');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+                
+                // Initial check
+                if (input.value && input.value.startsWith(' ')) {
+                    input.setCustomValidity('Input cannot start with spaces');
+                    input.classList.add('is-invalid');
+                }
+            };
+            
+            // Apply whitespace validation to all text inputs
+            const textInputs = loginForm.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], textarea');
+            textInputs.forEach(addWhitespaceValidation);
+            
+            // Handle form submission with admin check
+            loginForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                
+                // Validate form (Bootstrap validation)
+                if (!loginForm.checkValidity()) {
+                    e.stopPropagation();
+                    loginForm.classList.add('was-validated');
+                    return;
+                }
+                
+                // Check for whitespace errors
+                let hasWhitespaceError = false;
+                textInputs.forEach(input => {
+                    if (input.value && input.value.startsWith(' ')) {
+                        input.setCustomValidity('Input cannot start with spaces');
+                        input.classList.add('is-invalid');
+                        hasWhitespaceError = true;
+                    }
+                });
+                
+                if (hasWhitespaceError) {
+                    loginForm.classList.add('was-validated');
+                    return;
+                }
+
+                // Prepare form data
+                const formData = new FormData(loginForm);
+
+                try {
+                    // Check if user is admin
+                    const response = await fetch('/community/check-admin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(Object.fromEntries(formData))
+                    });
+
+                    const data = await response.json();
+
+                    if (data.isAdmin) {
+                        // Save form data and show admin key modal
+                        savedFormData = formData;
+                        communityName = data.communityName || '';
+
+                        // Update modal title with community name if available
+                        const modalTitle = document.getElementById('adminKeyModalLabel');
+                        if (modalTitle && communityName) {
+                            modalTitle.textContent = `Admin Verification Required for ${communityName}`;
+                        }
+
+                        adminKeyModal.show();
+                    } else {
+                        // Regular user - submit form normally
+                        loginForm.submit();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    loginForm.submit();
+                }
+            });
+
+            // Handle admin key submission
+            document.getElementById('submitAdminKey').addEventListener('click', function () {
+                const adminKey = document.getElementById('adminKeyInput').value;
+                if (!adminKey) return;
+
+                if (savedFormData) {
+                    savedFormData.append('adminKey', adminKey);
+
+                    // Create a new form and submit
+                    const newForm = document.createElement('form');
+                    newForm.method = 'POST';
+                    newForm.action = '/community/login';
+
+                    for (let [key, value] of savedFormData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        newForm.appendChild(input);
+                    }
+
+                    document.body.appendChild(newForm);
+                    newForm.submit();
+                }
+            });
+
+            // Pre-fill email or username if provided
+            <% if (locals.email) { %>
+                const emailInput = document.querySelector('input[name="email"]');
+                if (emailInput) emailInput.value = '<%= email %>';
+            <% } %>
+            
+            // Automatically show admin key modal if required by server
+            <% if (locals.requireAdminKey) { %>
+                setTimeout(() => {
+                    adminKeyModal.show();
+                }, 100);
+            <% } %>
+        });
+    </script>
+
+    <!-- Admin Key Modal -->
+    <div class="modal fade" id="adminKeyModal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="adminKeyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adminKeyModalLabel">Admin Verification Required</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Please enter your admin special key to continue.</p>
+                    <form id="adminKeyForm">
+                        <div class="form-group">
+                            <label for="adminKeyInput" class="form-label">Admin Special Key</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="adminKeyInput" name="adminKey" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleAdminKeyModal">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitAdminKey">Verify & Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

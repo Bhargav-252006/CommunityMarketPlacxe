@@ -1,0 +1,63 @@
+<!-- views/partials/vendor/recent-orders.ejs -->
+<div class="recent-orders-section mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-shopping-bag me-2 text-primary"></i>Recent Orders</h3>
+        <a href="/vendor/orders" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-list me-1"></i> View All Orders
+        </a>
+    </div>
+
+    <% if (recentOrders && recentOrders.length > 0) { %>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentOrders.forEach(order => { %>
+                                <tr>
+                                    <td class="fw-bold">#<%= order._id.toString().substring(0, 8).toUpperCase() %></td>
+                                    <td>
+                                        <% if (order.customerId) { %>
+                                            <%= typeof order.customerId === 'object' ? order.customerId.name : 'Customer #' + order.customerId.toString().substring(0, 6) %>
+                                        <% } else { %>
+                                            Unknown Customer
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(order.createdAt).toLocaleDateString() %>
+                                    </td>
+                                    <td class="fw-bold">₹<%= order.totalAmount.toFixed(2) %></td>
+                                    <td>
+                                        <span class="badge bg-<%= order.status === 'Pending' ? 'warning' : (order.status === 'Delivered' ? 'success' : 'primary') %> rounded-pill">
+                                            <%= order.status %>
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="/vendor/orders/view/<%= order._id %>" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            No recent orders found. Orders will appear here when customers place them.
+        </div>
+    <% } %>
+</div>

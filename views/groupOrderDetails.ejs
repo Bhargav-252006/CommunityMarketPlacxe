@@ -1,0 +1,108 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="mb-4">
+            <a href="/group-orders" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Group Orders
+            </a>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Group Order #<%= groupOrder._id.toString().substring(0, 8).toUpperCase() %>
+                    </h4>
+                    <span class="badge status-badge status-<%= groupOrder.status %>">
+                        <%= groupOrder.status %>
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Group Order Information</h5>
+                        <p><strong>Created By:</strong>
+                            <%= groupOrder.adminId.name %> (<%= groupOrder.adminId.email %>)
+                        </p>
+                        <p><strong>Created On:</strong>
+                            <%= new Date(groupOrder.createdAt).toLocaleString() %>
+                        </p>
+                        <p><strong>Total Orders:</strong>
+                            <%= groupOrder.orders.length %>
+                        </p>
+                        <p><strong>Total Amount:</strong> ₹<%= groupOrder.totalAmount.toFixed(2) %>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Status Management</h5>
+                        <form action="/group-orders/<%= groupOrder._id %>/status" method="POST">
+                            <div class="input-group mb-3">
+                                <select class="form-select" name="status">
+                                    <% orderStatuses.forEach(status=> { %>
+                                        <option value="<%= status %>" <%=groupOrder.status===status ? 'selected' : '' %>
+                                            >
+                                            <%= status %>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <button class="btn btn-primary" type="submit">Update Status</button>
+                            </div>
+                            <small class="text-muted">Updating the group order status will update all individual
+                                orders.</small>
+                        </form>
+                    </div>
+                </div>
+
+                <h5 class="mb-3">Included Orders</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% groupOrder.orders.forEach(order=> { %>
+                                <tr>
+                                    <td>#<%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                    </td>
+                                    <td>
+                                        <% if (order.customerId) { %>
+                                            <%= order.customerId.name %>
+                                                <small class="d-block text-muted">
+                                                    <%= order.customerId.email %>
+                                                </small>
+                                                <% } else { %>
+                                                    Unknown Customer
+                                                    <% } %>
+                                    </td>
+                                    <td>
+                                        <%= order.items.length %> items
+                                    </td>
+                                    <td>₹<%= order.totalAmount.toFixed(2) %>
+                                    </td>
+                                    <td>
+                                        <span class="badge status-badge status-<%= order.status %>">
+                                            <%= order.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/vendor/orders/view/<%= order._id %>" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

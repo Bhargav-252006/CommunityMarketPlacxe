@@ -1,0 +1,222 @@
+<!-- views/partials/vendor/categories.ejs -->
+<div class="inventory-section">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-boxes me-2 text-primary"></i>Inventory Overview</h3>
+        <a href="/vendor/items" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-list me-1"></i> View All Items
+        </a>
+    </div>
+
+    <% if (items && items.length> 0) { %>
+        <%
+        // Define our standard categories matching the community dashboard
+        const standardCategories = [
+            "All Items",
+            "Fruits & Vegetables",
+            "Dairy, Bread & Eggs",
+            "Cold Drinks & Juices",
+            "Snacks & Munchies",
+            "Breakfast & Instant Food",
+            "Bakery & Biscuits",
+            "Tea, Coffee & Health Drink",
+            "Atta, Rice & Dal",
+            "Masala, Oil & More",
+            "Cleaning Essentials"
+        ];
+        
+        // Categories to exclude
+        const excludedCategories = [
+            "Personal Care",
+            "Baby Care",
+            "Home & Office",
+            "Sweets & Mithai",
+            "Pickles & Chutneys"
+        ];
+        
+        // Get unique categories from items, filtering out excluded ones
+        let uniqueCategories = [...new Set(items.map(item => item.category))].filter(cat => 
+            !excludedCategories.some(excluded => cat.includes(excluded))
+        );
+        
+        // Map item categories to standard categories when possible
+        uniqueCategories = uniqueCategories.map(cat => {
+            if (cat.includes("Vegetable") || cat.includes("Fruit")) return "Fruits & Vegetables";
+            if (cat.includes("Dairy") || cat.includes("Milk") || cat.includes("Egg") || cat.includes("Bread")) return "Dairy, Bread & Eggs";
+            if (cat.includes("Drink") || cat.includes("Juice") || cat.includes("Cold")) return "Cold Drinks & Juices";
+            if (cat.includes("Snack") || cat.includes("Munchie")) return "Snacks & Munchies";
+            if (cat.includes("Breakfast") || cat.includes("Instant")) return "Breakfast & Instant Food";
+            if (cat.includes("Bakery") || cat.includes("Biscuit")) return "Bakery & Biscuits";
+            if (cat.includes("Tea") || cat.includes("Coffee") || cat.includes("Health")) return "Tea, Coffee & Health Drink";
+            if (cat.includes("Atta") || cat.includes("Rice") || cat.includes("Dal")) return "Atta, Rice & Dal";
+            if (cat.includes("Masala") || cat.includes("Oil") || cat.includes("Spice")) return "Masala, Oil & More";
+            if (cat.includes("Clean") || cat.includes("Essential")) return "Cleaning Essentials";
+            return cat; // Keep original if no match
+        });
+        
+        // Remove duplicates after mapping
+        uniqueCategories = [...new Set(uniqueCategories)];
+        %>
+
+            <div class="category-filter mb-3">
+                <div class="btn-group flex-wrap" role="group">
+                    <button type="button" class="btn btn-outline-secondary btn-sm active filter-btn" data-filter="all">
+                        <i class="fas fa-th-large me-1"></i> All Categories
+                    </button>
+                    <% uniqueCategories.forEach(category=> { 
+                        // Get appropriate icon for category
+                        let icon = 'fas fa-box';
+                        if (category === "Fruits & Vegetables") icon = 'fas fa-apple-alt';
+                        else if (category === "Dairy, Bread & Eggs") icon = 'fas fa-egg';
+                        else if (category === "Cold Drinks & Juices") icon = 'fas fa-wine-bottle';
+                        else if (category === "Snacks & Munchies") icon = 'fas fa-cookie';
+                        else if (category === "Breakfast & Instant Food") icon = 'fas fa-utensils';
+                        else if (category === "Bakery & Biscuits") icon = 'fas fa-bread-slice';
+                        else if (category === "Tea, Coffee & Health Drink") icon = 'fas fa-mug-hot';
+                        else if (category === "Atta, Rice & Dal") icon = 'fas fa-seedling';
+                        else if (category === "Masala, Oil & More") icon = 'fas fa-mortar-pestle';
+                        else if (category === "Cleaning Essentials") icon = 'fas fa-broom';
+                    %>
+                        <button type="button" class="btn btn-outline-secondary btn-sm filter-btn"
+                            data-filter="<%= category.replace(/\s+/g, '-').toLowerCase() %>">
+                            <i class="<%= icon %> me-1"></i> <%= category %>
+                        </button>
+                    <% }); %>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <% uniqueCategories.forEach(category=> { 
+                    // Get appropriate icon for category
+                    let icon = 'fas fa-box';
+                    if (category === "Fruits & Vegetables") icon = 'fas fa-apple-alt';
+                    else if (category === "Dairy, Bread & Eggs") icon = 'fas fa-egg';
+                    else if (category === "Cold Drinks & Juices") icon = 'fas fa-wine-bottle';
+                    else if (category === "Snacks & Munchies") icon = 'fas fa-cookie';
+                    else if (category === "Breakfast & Instant Food") icon = 'fas fa-utensils';
+                    else if (category === "Bakery & Biscuits") icon = 'fas fa-bread-slice';
+                    else if (category === "Tea, Coffee & Health Drink") icon = 'fas fa-mug-hot';
+                    else if (category === "Atta, Rice & Dal") icon = 'fas fa-seedling';
+                    else if (category === "Masala, Oil & More") icon = 'fas fa-mortar-pestle';
+                    else if (category === "Cleaning Essentials") icon = 'fas fa-broom';
+                %>
+                    <div class="col-12 mb-3 category-section" id="<%= category.replace(/\s+/g, '-').toLowerCase() %>">
+                        <div class="category-header d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                            <h5 class="mb-0">
+                                <i class="<%= icon %> me-2 text-primary"></i>
+                                <%= category %>
+                            </h5>
+                            <span class="badge bg-primary rounded-pill">
+                                <%= items.filter(item => {
+                                    // Match items to this category, including partial matches
+                                    const itemCat = item.category;
+                                    if (category === "Fruits & Vegetables" && (itemCat.includes("Fruit") || itemCat.includes("Vegetable"))) return true;
+                                    if (category === "Dairy, Bread & Eggs" && (itemCat.includes("Dairy") || itemCat.includes("Milk") || itemCat.includes("Egg") || itemCat.includes("Bread"))) return true;
+                                    if (category === "Cold Drinks & Juices" && (itemCat.includes("Drink") || itemCat.includes("Juice") || itemCat.includes("Cold"))) return true;
+                                    if (category === "Snacks & Munchies" && (itemCat.includes("Snack") || itemCat.includes("Munchie"))) return true;
+                                    if (category === "Breakfast & Instant Food" && (itemCat.includes("Breakfast") || itemCat.includes("Instant"))) return true;
+                                    if (category === "Bakery & Biscuits" && (itemCat.includes("Bakery") || itemCat.includes("Biscuit"))) return true;
+                                    if (category === "Tea, Coffee & Health Drink" && (itemCat.includes("Tea") || itemCat.includes("Coffee") || itemCat.includes("Health"))) return true;
+                                    if (category === "Atta, Rice & Dal" && (itemCat.includes("Atta") || itemCat.includes("Rice") || itemCat.includes("Dal"))) return true;
+                                    if (category === "Masala, Oil & More" && (itemCat.includes("Masala") || itemCat.includes("Oil") || itemCat.includes("Spice"))) return true;
+                                    if (category === "Cleaning Essentials" && (itemCat.includes("Clean") || itemCat.includes("Essential"))) return true;
+                                    return category === itemCat;
+                                }).length %> items
+                            </span>
+                        </div>
+
+                        <div class="row g-3">
+                            <% items.filter(item => {
+                                // Match items to this category, including partial matches
+                                const itemCat = item.category;
+                                if (category === "Fruits & Vegetables" && (itemCat.includes("Fruit") || itemCat.includes("Vegetable"))) return true;
+                                if (category === "Dairy, Bread & Eggs" && (itemCat.includes("Dairy") || itemCat.includes("Milk") || itemCat.includes("Egg") || itemCat.includes("Bread"))) return true;
+                                if (category === "Cold Drinks & Juices" && (itemCat.includes("Drink") || itemCat.includes("Juice") || itemCat.includes("Cold"))) return true;
+                                if (category === "Snacks & Munchies" && (itemCat.includes("Snack") || itemCat.includes("Munchie"))) return true;
+                                if (category === "Breakfast & Instant Food" && (itemCat.includes("Breakfast") || itemCat.includes("Instant"))) return true;
+                                if (category === "Bakery & Biscuits" && (itemCat.includes("Bakery") || itemCat.includes("Biscuit"))) return true;
+                                if (category === "Tea, Coffee & Health Drink" && (itemCat.includes("Tea") || itemCat.includes("Coffee") || itemCat.includes("Health"))) return true;
+                                if (category === "Atta, Rice & Dal" && (itemCat.includes("Atta") || itemCat.includes("Rice") || itemCat.includes("Dal"))) return true;
+                                if (category === "Masala, Oil & More" && (itemCat.includes("Masala") || itemCat.includes("Oil") || itemCat.includes("Spice"))) return true;
+                                if (category === "Cleaning Essentials" && (itemCat.includes("Clean") || itemCat.includes("Essential"))) return true;
+                                return category === itemCat;
+                            }).forEach(item => { %>
+                                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                    <div class="card h-100 inventory-item shadow-sm border-0 hover-elevation">
+                                        <div class="inventory-item-img-container">
+                                            <% if (item.imageUrl) { %>
+                                                <img src="<%= item.imageUrl %>" alt="<%= item.itemName %>"
+                                                    class="card-img-top inventory-img">
+                                                <% } else { %>
+                                                    <div class="no-img-placeholder">
+                                                        <i class="fas fa-box text-muted fa-2x"></i>
+                                                    </div>
+                                                    <% } %>
+                                                        <span
+                                                            class="badge bg-<%= item.itemQuantity < 10 ? 'danger' : 'success' %> position-absolute bottom-0 end-0 m-2">
+                                                            <%= item.itemQuantity %>
+                                                                <%= item.unit %>
+                                                        </span>
+                                        </div>
+                                        <div class="card-body d-flex flex-column">
+                                            <h6 class="card-title text-truncate fw-bold" title="<%= item.itemName %>">
+                                                <%= item.itemName %>
+                                            </h6>
+                                            <p class="card-subtitle text-muted small mb-2 text-truncate"
+                                                title="ID: <%= item.itemId %>">
+                                                ID: <%= item.itemId %>
+                                            </p>
+                                            <div class="d-flex justify-content-between mt-auto">
+                                                <span class="fw-bold text-success">₹<%= item.costPerUnit.toFixed(2) %>
+                                                        </span>
+                                                <a href="/vendor/items/edit/<%= item._id %>"
+                                                    class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-edit me-1"></i> Edit
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    You don't have any items yet. Add your first item to get started!
+                </div>
+                <% } %>
+</div>
+
+<script>
+    // Category filtering functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const filter = this.getAttribute('data-filter');
+
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show/hide categories
+                if (filter === 'all') {
+                    document.querySelectorAll('.category-section').forEach(section => {
+                        section.style.display = 'block';
+                    });
+                } else {
+                    document.querySelectorAll('.category-section').forEach(section => {
+                        if (section.id === filter) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

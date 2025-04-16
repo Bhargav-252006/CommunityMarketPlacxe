@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Community Marketplace</title>
+    <%- include('partials/favicon') %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e54c8; /* Rich Purple */
+            --secondary-color: #8f94fb; /* Light Purple */
+            --accent-color: #16a085; /* Teal Green */
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #6c757d;
+            --highlight: #f39c12; /* Amber */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f8b195 0%, #f67280 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+            height: auto;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-banner {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(69, 104, 220, 0.85) 0%, rgba(176, 106, 179, 0.9) 100%);
+            z-index: 0;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo i {
+            color: var(--highlight);
+            margin-right: 15px;
+            font-size: 2.7rem;
+        }
+
+        .logo span {
+            color: var(--highlight);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .login-banner h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-banner p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .features-list {
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .features-list i {
+            margin-right: 12px;
+            background-color: var(--highlight);
+            color: var(--dark-text);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .community-badge {
+            position: absolute;
+            top: 20px;
+            right: -15px;
+            background-color: var(--highlight);
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 8px 25px;
+            border-radius: 30px;
+            transform: rotate(35deg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.85rem;
+            z-index: 2;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            color: var(--dark-text);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-header p {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .role-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .role-card {
+            flex: 1;
+            padding: 22px;
+            border-radius: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+            min-height: 260px;
+            border: 2px solid transparent;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            opacity: 0.15;
+            transition: opacity 0.3s;
+        }
+
+        .community-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3a40b5 100%);
+        }
+
+        .community-card::before {
+            background-image: url('https://images.unsplash.com/photo-1532635241-17e820acc59f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
+        }
+
+        .vendor-card {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #107a64 100%);
+        }
+
+        .vendor-card::before {
+            background-image: url('https://images.unsplash.com/photo-1572196284554-4e321b0e7e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .role-card:hover::before {
+            opacity: 0.25;
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-card:hover .role-icon {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .role-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-card p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            margin-top: auto;
+        }
+
+        .card-features span {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-features span i {
+            margin-right: 8px;
+            font-size: 0.85rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .role-card:hover .card-features span {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--light-text);
+            background-color: #f9fafb;
+            padding: 12px 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .login-footer p {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .login-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 5px 8px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        .login-footer .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .login-footer a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(78, 84, 200, 0.3);
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .alert-error i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 991px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 600px;
+                max-height: none;
+                overflow-y: auto;
+                margin: 20px;
+            }
+
+            .login-banner,
+            .login-form {
+                padding: 30px;
+            }
+
+            .login-banner {
+                text-align: center;
+            }
+
+            .features-list {
+                display: inline-block;
+                text-align: left;
+                margin: 0 auto;
+            }
+
+            .community-badge {
+                top: 20px;
+                right: 20px;
+                transform: rotate(0);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .role-cards {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .role-card {
+                width: 100%;
+                margin-bottom: 0;
+                min-height: auto;
+                padding-bottom: 25px;
+            }
+
+            .login-banner h1 {
+                font-size: 2rem;
+            }
+
+            .login-banner p {
+                font-size: 1rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .logo {
+                font-size: 2.2rem;
+            }
+
+            .logo i {
+                font-size: 2.4rem;
+            }
+
+            .login-footer .links-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-footer a {
+                margin: 3px auto;
+                width: 80%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .login-container {
+                border-radius: 15px;
+            }
+
+            .login-banner, 
+            .login-form {
+                padding: 20px;
+            }
+
+            .role-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .login-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .login-footer a {
+                display: block;
+                margin: 8px auto;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-banner">
+            <div class="community-badge">
+                <i class="fas fa-users"></i> Join Today
+            </div>
+            <div class="banner-content">
+                <div class="logo-area fadeInUp">
+                    <div class="logo">
+                        <i class="fas fa-store"></i> Community <span>Marketplace</span>
+                    </div>
+                    <div class="tagline">Connecting Local Communities</div>
+                </div>
+                
+                <h1 class="fadeInUp delay-1">Your Local Community Hub</h1>
+                <p class="fadeInUp delay-2">Connect with trusted vendors and discover unique products from your local community. Support local businesses and enjoy a personalized shopping experience.</p>
+
+                <ul class="features-list list-unstyled fadeInUp delay-3">
+                    <li><i class="fas fa-check"></i> Fresh, locally sourced products</li>
+                    <li><i class="fas fa-check"></i> Support your community businesses</li>
+                    <li><i class="fas fa-check"></i> Secure, convenient transactions</li>
+                    <li><i class="fas fa-check"></i> Build meaningful local connections</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <div class="login-header fadeInUp">
+                <h2>Welcome to the Community</h2>
+                <p>Choose how you'd like to participate</p>
+            </div>
+
+            <%- include('partials/messages') %>
+
+            <div class="role-cards">
+                <a href="/community/login" class="role-card community-card fadeInUp">
+                    <div class="role-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Community Member</h3>
+                    <p>Browse local products and connect with vendors</p>
+                    <div class="card-features">
+                        <span><i class="fas fa-tag"></i> Access local deals</span>
+                        <span><i class="fas fa-hand-holding-heart"></i> Support local businesses</span>
+                    </div>
+                </a>
+
+                <a href="/vendor/login" class="role-card vendor-card fadeInUp delay-1">
+                    <div class="role-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Local Vendor</h3>
+                    <p>Offer your products to the community</p>
+                    <div class="card-features">
+                        <span><i class="fas fa-chart-line"></i> Grow your business</span>
+                        <span><i class="fas fa-users"></i> Connect with customers</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="login-footer fadeInUp delay-2">
+                <p>New to our community?</p>
+                <div class="links-container">
+                    <a href="/community/create"><i class="fas fa-users"></i> Create Community</a>
+                    <a href="/community/register"><i class="fas fa-user-plus"></i> Join Community</a>
+                    <a href="/vendor/register"><i class="fas fa-store-alt"></i> Register as Vendor</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

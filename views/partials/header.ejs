@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Marketplace</title>
+    <%- include('favicon') %>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+        <!-- Custom Styles -->
+        <link href="/css/community-styles.css" rel="stylesheet">
+        <style>
+            :root {
+                /* Modern elegant color scheme */
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --light-color: #f8f9fa;
+                --dark-color: #212529;
+                --success-color: #2ecc71;
+                --warning-color: #f39c12;
+                --danger-color: #e74c3c;
+                --bg-light: #ffffff;
+                --bg-soft: #f5f7fa;
+                --text-primary: #2c3e50;
+                --text-secondary: #7f8c8d;
+                --border-color: #e9ecef;
+            }
+
+            body {
+                font-family: 'Montserrat', sans-serif;
+                color: var(--text-primary);
+                background-color: var(--bg-soft);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-family: 'Playfair Display', serif;
+            }
+
+            /* Enhanced Modern Navbar Styling */
+            .navbar {
+                padding: 1rem 0;
+                background-color: var(--bg-light) !important;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+            }
+
+            .navbar-brand {
+                font-family: 'Playfair Display', serif;
+                font-weight: 700;
+                font-size: 1.5rem;
+                color: var(--primary-color);
+                display: flex;
+                align-items: center;
+                letter-spacing: 0.5px;
+            }
+
+            .navbar-brand-icon {
+                color: var(--accent-color);
+                margin-right: 10px;
+                font-size: 1.7rem;
+            }
+
+            .nav-link {
+                font-weight: 500;
+                padding: 0.6rem 1.2rem !important;
+                position: relative;
+                transition: all 0.3s ease;
+                color: var(--text-primary);
+                border-radius: 4px;
+                margin: 0 3px;
+                font-size: 0.95rem;
+                letter-spacing: 0.4px;
+            }
+
+            .nav-link:hover {
+                color: var(--secondary-color);
+                transform: translateY(-2px);
+            }
+
+            .nav-link.active {
+                color: var(--secondary-color);
+                font-weight: 600;
+            }
+
+            .nav-link.active::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                width: 30px;
+                height: 3px;
+                background-color: var(--secondary-color);
+                transform: translateX(-50%);
+                border-radius: 5px;
+            }
+
+            /* Dropdown styling */
+            .dropdown-menu {
+                border: none;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 0.8rem;
+                padding: 1rem 0;
+                min-width: 230px;
+                margin-top: 10px;
+                animation: fadeIn 0.3s ease;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .dropdown-item {
+                padding: 0.7rem 1.5rem;
+                font-weight: 500;
+                color: var(--text-primary);
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+            .dropdown-item:hover {
+                background-color: rgba(52, 152, 219, 0.08);
+                color: var(--secondary-color);
+                transform: translateX(5px);
+            }
+
+            .dropdown-item i {
+                margin-right: 12px;
+                color: var(--secondary-color);
+                width: 18px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+
+            .dropdown-item:hover i {
+                transform: scale(1.2);
+            }
+
+            /* Action Buttons */
+            .nav-action-btn {
+                padding: 0.6rem 1.4rem;
+                border-radius: 50px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                margin-left: 10px;
+                letter-spacing: 0.5px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-nav-primary {
+                background-color: var(--secondary-color);
+                border-color: var(--secondary-color);
+                color: white;
+            }
+
+            .btn-nav-primary:hover {
+                background-color: #217dbb;
+                border-color: #217dbb;
+                color: white;
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            }
+
+            .btn-nav-outline {
+                border: 2px solid var(--secondary-color);
+                color: var(--secondary-color);
+                background-color: transparent;
+            }
+
+            .btn-nav-outline:hover {
+                background-color: var(--secondary-color);
+                color: white;
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            }
+
+            /* Cart indicator */
+            .cart-indicator {
+                position: relative;
+                display: inline-block;
+                margin-right: 10px;
+                transition: all 0.3s ease;
+            }
+
+            .cart-indicator:hover {
+                transform: translateY(-3px);
+            }
+
+            .cart-count {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background-color: var(--accent-color);
+                color: white;
+                border-radius: 50%;
+                width: 22px;
+                height: 22px;
+                font-size: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+                transition: all 0.3s ease;
+            }
+
+            .cart-indicator:hover .cart-count {
+                transform: scale(1.1);
+            }
+
+            /* User dropdown */
+            .user-dropdown .dropdown-toggle {
+                display: flex;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                background-color: var(--bg-soft);
+                border-radius: 50px;
+                transition: all 0.3s ease;
+            }
+
+            .user-dropdown .dropdown-toggle:hover {
+                background-color: rgba(52, 152, 219, 0.1);
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: var(--secondary-color);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 8px;
+                font-weight: 600;
+                font-size: 1rem;
+            }
+
+            /* Responsive Navbar */
+            @media (max-width: 991.98px) {
+                .navbar-brand {
+                    font-size: 1.3rem;
+                }
+
+                .navbar-collapse {
+                    background-color: var(--bg-light);
+                    padding: 1.5rem;
+                    border-radius: 1rem;
+                    margin-top: 0.8rem;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                }
+
+                .nav-link.active::after {
+                    display: none;
+                }
+
+                .nav-link.active {
+                    background-color: rgba(52, 152, 219, 0.1);
+                    color: var(--secondary-color);
+                }
+
+                .nav-action-btn {
+                    margin: 0.8rem 0;
+                    display: block;
+                    text-align: center;
+                }
+
+                .user-dropdown .dropdown-toggle {
+                    background-color: transparent;
+                    padding-left: 0;
+                }
+            }
+
+            @media (max-width: 767.98px) {
+                .navbar-brand-text {
+                    max-width: 150px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            /* Status Badge Styles */
+            .status-badge {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                border-radius: 30px;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                display: inline-flex;
+                align-items: center;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+
+            .status-badge i {
+                margin-right: 5px;
+                font-size: 0.8rem;
+            }
+
+            .status-Pending {
+                background-color: #FEF3C7;
+                color: #92400E;
+            }
+
+            .status-Processing {
+                background-color: #DBEAFE;
+                color: #1E40AF;
+            }
+
+            .status-Shipped {
+                background-color: #E0E7FF;
+                color: #4338CA;
+            }
+
+            .status-Delivered {
+                background-color: #D1FAE5;
+                color: #065F46;
+            }
+
+            .status-Cancelled {
+                background-color: #FEE2E2;
+                color: #B91C1C;
+            }
+
+            /* Card styling */
+            .card {
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                overflow: hidden;
+            }
+
+            .card:hover {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                transform: translateY(-5px);
+            }
+
+            .card-header {
+                background-color: var(--bg-light);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.25rem 1.5rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            /* Content wrapper */
+            .content-wrapper {
+                min-height: calc(100vh - 180px);
+                /* Adjust based on footer height */
+                padding: 2rem 0;
+            }
+        </style>
+</head>
+
+<body>
+    <!-- Set a default value for currentPage if it's not defined -->
+    <% var currentPage=(typeof currentPage !=='undefined' ) ? currentPage : '' ; %>
+        <% var cartCount=(typeof cartCount !=='undefined' ) ? cartCount : 0; %>
+            <% var isAdmin=(typeof isAdmin !=='undefined' ) ? isAdmin : false; %>
+
+                <header>
+                    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+                        <div class="container">
+                            <a class="navbar-brand" href="/dashboard">
+                                <i class="fas fa-store-alt navbar-brand-icon"></i>
+                                <span class="navbar-brand-text">Community Marketplace</span>
+                            </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarNav" aria-expanded="false">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav me-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= currentPage === 'dashboard' ? 'active' : '' %>"
+                                            href="/dashboard">
+                                            <i class="fas fa-home me-1"></i>Home
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= currentPage === 'items' ? 'active' : '' %>"
+                                            href="/items">
+                                            <i class="fas fa-tag me-1"></i>Shop
+                                        </a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle <%= ['orders', 'orderHistory'].includes(currentPage) ? 'active' : '' %>"
+                                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-box me-1"></i>Orders
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/orders"><i class="fas fa-list"></i>My
+                                                    Orders</a></li>
+                                            <% if (isAdmin) { %>
+                                                <li><a class="dropdown-item" href="/admin/all-orders"><i
+                                                            class="fas fa-boxes"></i>All Orders</a></li>
+                                                <li><a class="dropdown-item" href="/group-orders"><i
+                                                            class="fas fa-layer-group"></i>Group Orders</a></li>
+                                                <% } %>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li><a class="dropdown-item" href="/orders/history"><i
+                                                                class="fas fa-history"></i>Order History</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav align-items-center">
+                                    <li class="nav-item ms-auto">
+                                        <a class="nav-link cart-indicator <%= currentPage === 'cart' ? 'active' : '' %>"
+                                            href="/cart">
+                                            <i class="fas fa-shopping-cart fa-lg"></i>
+                                            <span class="ms-2 d-none d-lg-inline">Cart</span>
+                                            <% if (cartCount> 0) { %>
+                                                <span class="cart-count">
+                                                    <%= cartCount %>
+                                                </span>
+                                                <% } %>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item d-lg-none">
+                                        <a class="nav-link <%= currentPage === 'cart' ? 'active' : '' %>" href="/cart">
+                                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                                            <% if (cartCount> 0) { %>
+                                                <span class="badge rounded-pill bg-accent-color">
+                                                    <%= cartCount %>
+                                                </span>
+                                                <% } %>
+                                        </a>
+                                    </li>
+                                    <!-- Logout Button -->
+                                    <li class="nav-item">
+                                        <a href="/logout" class="btn btn-sm btn-danger ms-3">
+                                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+
+                <div class="content-wrapper">
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+</div> <!-- End of content-wrapper -->
+
+<footer class="footer py-5 border-top">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <a href="/dashboard" class="d-inline-flex align-items-center mb-4 text-decoration-none">
+                    <i class="fas fa-store-alt text-danger me-3 fs-3"></i>
+                    <h4 class="text-primary fw-bold m-0">Community Marketplace</h4>
+                </a>
+                <p class="text-secondary">Connecting local vendors with community members to create sustainable shopping
+                    experiences and strengthen neighborhood bonds.</p>
+                <div class="social-icons mt-4">
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-info btn-sm rounded-circle me-2">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-danger btn-sm rounded-circle me-2">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-success btn-sm rounded-circle me-2">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <h6 class="text-dark fw-semibold mb-4">Stay Updated</h6>
+                <p class="text-secondary mb-3">Subscribe to our newsletter for the latest products and community events.
+                </p>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Your email address" aria-label="Email"
+                        style="border-radius: 50px 0 0 50px;">
+                    <button class="btn btn-primary px-4" type="button"
+                        style="border-radius: 0 50px 50px 0;">Subscribe</button>
+                </div>
+                <p class="small text-secondary mt-3">By subscribing you agree to our <a href="#"
+                        class="text-decoration-none">Privacy Policy</a></p>
+            </div>
+        </div>
+
+        <div class="footer-middle py-4 mt-4 border-top border-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="text-dark fw-semibold mb-2">Customer Service</h6>
+                    <p class="text-secondary mb-0">
+                        <i class="fas fa-envelope me-2"></i> support@communitymarket.com<br>
+                        <i class="fas fa-phone-alt me-2"></i> +1 (555) 123-4567
+                    </p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0 text-md-center">
+                    <h6 class="text-dark fw-semibold mb-2">Secure Payments</h6>
+                    <div class="payment-icons">
+                        <i class="fab fa-cc-visa fa-2x me-2 text-secondary"></i>
+                        <i class="fab fa-cc-mastercard fa-2x me-2 text-secondary"></i>
+                        <i class="fab fa-cc-paypal fa-2x me-2 text-secondary"></i>
+                        <i class="fab fa-cc-apple-pay fa-2x text-secondary"></i>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <h6 class="text-dark fw-semibold mb-2">Download Our App</h6>
+                    <div class="app-buttons">
+                        <a href="#" class="btn btn-outline-dark btn-sm me-2">
+                            <i class="fab fa-apple me-2"></i> App Store
+                        </a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">
+                            <i class="fab fa-google-play me-2"></i> Google Play
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom pt-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="small text-secondary mb-0">&copy; <%= currentYear %> Community Marketplace.
+                            All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="#" class="small text-decoration-none text-secondary footer-link">Privacy Policy</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <span class="small text-secondary">•</span>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="small text-decoration-none text-secondary footer-link">Terms of
+                                Service</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <span class="small text-secondary">•</span>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="small text-decoration-none text-secondary footer-link">Cookie Policy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Cart JS -->
+<script src="/js/cart.js"></script>
+<!-- Custom JS -->
+<script>
+    // Initialize all tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+        // Highlight current page in navbar
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPath || (href !== '/dashboard' && currentPath.startsWith(href))) {
+                link.classList.add('active');
+            }
+        });
+
+        // Add custom styling for footer links
+        const footerLinks = document.querySelectorAll('.footer-link');
+        footerLinks.forEach(link => {
+            link.addEventListener('mouseenter', function () {
+                this.classList.add('text-primary');
+                this.style.transition = 'color 0.3s ease';
+                this.style.transform = 'translateX(5px)';
+                this.style.display = 'inline-block';
+            });
+            link.addEventListener('mouseleave', function () {
+                this.classList.remove('text-primary');
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    });
+</script>

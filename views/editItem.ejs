@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <body>
+        <div class="page-header">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="/vendor/dashboard" class="home-nav">
+                        <i class="fas fa-home me-2"></i> Back to Dashboard
+                    </a>
+                    <a href="/logout" class="home-nav text-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-edit me-2"></i> Edit Item
+                        </div>
+                        <div class="card-body">
+                            <form action="/vendor/items/edit/<%= item._id %>" method="POST"
+                                enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Item Name</label>
+                                        <input type="text" class="form-control" name="itemName"
+                                            value="<%= item.itemName %>" required>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" name="category" required>
+                                            <option value="">Select Category</option>
+                                            <option value="Fruits & Vegetables" <%=item.category==='Fruits & Vegetables'
+                                                ? 'selected' : '' %>>Fruits & Vegetables</option>
+                                            <option value="Dairy & Breakfast" <%=item.category==='Dairy & Breakfast'
+                                                ? 'selected' : '' %>>Dairy & Breakfast</option>
+                                            <option value="Snacks & Munchies" <%=item.category==='Snacks & Munchies'
+                                                ? 'selected' : '' %>>Snacks & Munchies</option>
+                                            <option value="Beverages" <%=item.category==='Beverages' ? 'selected' : ''
+                                                %>
+                                                >Beverages</option>
+                                            <option value="Cleaning Essentials" <%=item.category==='Cleaning Essentials'
+                                                ? 'selected' : '' %>>Cleaning Essentials</option>
+                                            <option value="Personal Care" <%=item.category==='Personal Care'
+                                                ? 'selected' : '' %>>Personal Care</option>
+                                            <option value="Kitchen, Garden & Pets"
+                                                <%=item.category==='Kitchen, Garden & Pets' ? 'selected' : '' %>
+                                                >Kitchen,
+                                                Garden & Pets</option>
+                                            <option value="Eggs, Meat & Fish" <%=item.category==='Eggs, Meat & Fish'
+                                                ? 'selected' : '' %>>Eggs, Meat & Fish</option>
+                                            <option value="Gourmet & World Food"
+                                                <%=item.category==='Gourmet & World Food' ? 'selected' : '' %>>Gourmet &
+                                                World Food</option>
+                                            <option value="Baby Care" <%=item.category==='Baby Care' ? 'selected' : ''
+                                                %>
+                                                >Baby Care</option>
+                                            <option value="Pharmacy" <%=item.category==='Pharmacy' ? 'selected' : '' %>
+                                                >Pharmacy</option>
+                                            <option value="Home & Office" <%=item.category==='Home & Office'
+                                                ? 'selected' : '' %>>Home & Office</option>
+                                            <option value="Bakery & Biscuits" <%=item.category==='Bakery & Biscuits'
+                                                ? 'selected' : '' %>>Bakery & Biscuits</option>
+                                            <option value="Fashion" <%=item.category==='Fashion' ? 'selected' : '' %>
+                                                >Fashion</option>
+                                            <option value="Electronics" <%=item.category==='Electronics' ? 'selected'
+                                                : '' %>>Electronics</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" name="itemQuantity"
+                                            value="<%= item.itemQuantity %>" required>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Unit</label>
+                                        <select class="form-select" name="unit" required>
+                                            <option value="kg" <%=item.unit==='kg' ? 'selected' : '' %>>Kilogram (kg)
+                                            </option>
+                                            <option value="g" <%=item.unit==='g' ? 'selected' : '' %>>Gram (g)</option>
+                                            <option value="pcs" <%=item.unit==='pcs' ? 'selected' : '' %>>Pieces
+                                            </option>
+                                            <option value="l" <%=item.unit==='l' ? 'selected' : '' %>>Liter (L)</option>
+                                            <option value="ml" <%=item.unit==='ml' ? 'selected' : '' %>>Milliliter (ml)
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Cost per Unit</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="number" class="form-control" name="costPerUnit" step="0.01"
+                                                value="<%= item.costPerUnit %>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Brand</label>
+                                        <input type="text" class="form-control" name="brand" value="<%= item.brand %>">
+                                    </div>
+
+                                    <div class="col-12 mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="description"
+                                            rows="4"><%= item.description %></textarea>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Image</label>
+                                        <% if (item.imageUrl) { %>
+                                            <div class="image-preview-container">
+                                                <img src="<%= item.imageUrl %>" alt="<%= item.itemName %>"
+                                                    class="image-preview">
+                                            </div>
+                                            <% } %>
+                                                <input type="file" class="form-control" name="image" accept="image/*">
+                                                <small class="text-muted">Leave empty to keep current image</small>
+                                    </div>
+
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="date" class="form-control" name="expiryDate"
+                                            value="<%= item.expiryDate ? item.expiryDate.toISOString().split('T')[0] : '' %>">
+                                    </div>
+
+                                    <div class="col-12 mb-4">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input" name="isAvailable"
+                                                id="isAvailable" <%=item.isAvailable ? 'checked' : '' %>>
+                                            <label class="form-check-label" for="isAvailable">Item is Available for
+                                                Purchase</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between action-buttons">
+                                            <a href="/vendor/items" class="btn btn-secondary">
+                                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save me-2"></i>Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>

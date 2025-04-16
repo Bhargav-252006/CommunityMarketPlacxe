@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Order Details | <%= community.name %>
+    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin/dashboard">
+                <i class="bi bi-shop me-2"></i>
+                <%= community.name %> Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/dashboard">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/community-carts">
+                            <i class="bi bi-cart3 me-1"></i> Community Carts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/group-orders">
+                            <i class="bi bi-box-seam me-1"></i> Group Orders
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/logout" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/group-orders">Group Orders</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Order Details</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">Group Order Details</h4>
+                            <div>
+                                <span class="badge bg-<%= 
+                                    groupOrder.status === 'Processing' ? 'warning' : 
+                                    groupOrder.status === 'Shipped' ? 'info' : 
+                                    groupOrder.status === 'Delivered' ? 'success' : 
+                                    groupOrder.status === 'Cancelled' ? 'danger' : 'secondary' 
+                                %>">
+                                    <%= groupOrder.status %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Order ID:</strong>
+                                    <%= groupOrder._id %>
+                                </p>
+                                <p><strong>Created:</strong>
+                                    <%= new Date(groupOrder.createdAt).toLocaleString() %>
+                                </p>
+                                <p><strong>Status:</strong>
+                                    <%= groupOrder.status %>
+                                </p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle"
+                                        data-bs-toggle="dropdown">
+                                        Update Status
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item"
+                                                href="/admin/group-order/<%= groupOrder._id %>/status/Processing">Processing</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                                href="/admin/group-order/<%= groupOrder._id %>/status/Shipped">Shipped</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                                href="/admin/group-order/<%= groupOrder._id %>/status/Delivered">Delivered</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item text-danger"
+                                                href="/admin/group-order/<%= groupOrder._id %>/status/Cancelled">Cancelled</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if (orders.length===0) { %>
+                            <div class="alert alert-warning">
+                                No individual orders found in this group order.
+                            </div>
+                            <% } else { %>
+                                <h5 class="mt-4">Individual Orders</h5>
+                                <% let vendors={}; %>
+                                    <% let grandTotal=0; %>
+
+                                        <% orders.forEach(order=> { %>
+                                            <% order.items.forEach(item=> { %>
+                                                <% const vendorId=item.vendorId ? item.vendorId._id.toString()
+                                                    : 'unknown' ; const vendorName=item.vendorId ? item.vendorId.name
+                                                    : 'Unknown Vendor' ; if (!vendors[vendorId]) { vendors[vendorId]={
+                                                    name: vendorName, items: [], total: 0 }; } const
+                                                    itemTotal=item.price * item.quantity; vendors[vendorId].items.push({
+                                                    name: item.itemId.itemName, quantity: item.quantity, unit:
+                                                    item.itemId.unit, price: item.price, total: itemTotal, username:
+                                                    order.userId.name }); vendors[vendorId].total +=itemTotal;
+                                                    grandTotal +=itemTotal; %>
+                                                    <% }); %>
+                                                        <% }); %>
+
+                                                            <!-- Group items by vendor for easier management -->
+                                                            <div class="accordion mt-3" id="vendorAccordion">
+                                                                <% Object.keys(vendors).forEach((vendorId, index)=> { %>
+                                                                    <div class="accordion-item">
+                                                                        <h2 class="accordion-header"
+                                                                            id="heading<%= index %>">
+                                                                            <button
+                                                                                class="accordion-button <%= index > 0 ? 'collapsed' : '' %>"
+                                                                                type="button" data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapse<%= index %>">
+                                                                                <%= vendors[vendorId].name %> - ₹<%=
+                                                                                        vendors[vendorId].total.toFixed(2)
+                                                                                        %>
+                                                                            </button>
+                                                                        </h2>
+                                                                        <div id="collapse<%= index %>"
+                                                                            class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>"
+                                                                            data-bs-parent="#vendorAccordion">
+                                                                            <div class="accordion-body p-0">
+                                                                                <div class="table-responsive">
+                                                                                    <table
+                                                                                        class="table table-striped mb-0">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Customer</th>
+                                                                                                <th>Item</th>
+                                                                                                <th>Quantity</th>
+                                                                                                <th>Price</th>
+                                                                                                <th class="text-end">
+                                                                                                    Total</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <%
+                                                                                                vendors[vendorId].items.forEach(item=>
+                                                                                                { %>
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <%= item.username
+                                                                                                            %>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <%= item.name %>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <%= item.quantity
+                                                                                                            %>
+                                                                                                            <%= item.unit
+                                                                                                                %>
+                                                                                                    </td>
+                                                                                                    <td>₹<%= item.price.toFixed(2)
+                                                                                                            %>
+                                                                                                    </td>
+                                                                                                    <td
+                                                                                                        class="text-end">
+                                                                                                        ₹<%= item.total.toFixed(2)
+                                                                                                            %>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <% }); %>
+                                                                                        </tbody>
+                                                                                        <tfoot>
+                                                                                            <tr>
+                                                                                                <th colspan="4">Vendor
+                                                                                                    Total</th>
+                                                                                                <th class="text-end">₹
+                                                                                                    <%= vendors[vendorId].total.toFixed(2)
+                                                                                                        %>
+                                                                                                </th>
+                                                                                            </tr>
+                                                                                        </tfoot>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <% }); %>
+                                                            </div>
+
+                                                            <div class="card mt-4">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <h5>Order Summary</h5>
+                                                                            <p><strong>Total Orders:</strong>
+                                                                                <%= orders.length %>
+                                                                            </p>
+                                                                            <p><strong>Total Vendors:</strong>
+                                                                                <%= Object.keys(vendors).length %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-md-6 text-md-end">
+                                                                            <h5>Grand Total</h5>
+                                                                            <h3 class="text-primary">₹<%=
+                                                                                    grandTotal.toFixed(2) %>
+                                                                            </h3>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <% } %>
+
+                                                                <div
+                                                                    class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                                                    <a href="/admin/group-orders"
+                                                                        class="btn btn-secondary">
+                                                                        <i class="bi bi-arrow-left me-2"></i> Back to
+                                                                        Group Orders
+                                                                    </a>
+                                                                    <button class="btn btn-primary"
+                                                                        onclick="window.print()">
+                                                                        <i class="bi bi-printer me-2"></i> Print Order
+                                                                    </button>
+                                                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

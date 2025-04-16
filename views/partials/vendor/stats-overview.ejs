@@ -1,0 +1,80 @@
+<!-- views/partials/vendor/stats-overview.ejs -->
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-left-primary h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Items</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <%= items ? items.length : 0 %>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-box-open fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-left-success h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Total Sales</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹<%= typeof totalSales !=='undefined' ?
+                                totalSales.toFixed(2) : '0.00' %>
+                        </div>
+                        <div class="text-xs text-muted mt-1">(Processed, Shipped, Delivered orders)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-left-info h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Orders</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <%= typeof orders !=='undefined' ? orders.length : 0 %>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-left-warning h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Pending Orders</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <%= typeof pendingOrders !=='undefined' ? pendingOrders.length : (typeof orders
+                                !=='undefined' ? orders.filter(order=> order.status === 'Pending').length : 0) %>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

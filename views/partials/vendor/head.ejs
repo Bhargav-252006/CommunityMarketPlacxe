@@ -1,0 +1,292 @@
+<!-- views/partials/vendor/head.ejs -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+    <% if (typeof title !=='undefined' ) { %>
+        <%= title %>
+            <% } else { %>
+                Vendor Dashboard - Community Marketplace
+                <% } %>
+</title>
+<%- include('../favicon') %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #10b981;
+        --secondary-color: #1f2937;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f3f4f6;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        background-color: var(--secondary-color);
+        min-height: 100vh;
+        color: white;
+        padding: 20px;
+        position: fixed;
+        width: 250px;
+        transition: all 0.3s;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            position: relative;
+            width: 100%;
+            min-height: auto;
+        }
+    }
+
+    .main-content {
+        padding: 20px;
+        margin-left: 250px;
+        transition: all 0.3s;
+    }
+
+    @media (max-width: 768px) {
+        .main-content {
+            margin-left: 0;
+        }
+    }
+
+    .category-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .item-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .item-card {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .item-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 100%;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+
+    .item-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Fix for order item images */
+    table .item-image {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    /* Style for action buttons in tables */
+    .table .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .table .btn-sm i {
+        font-size: 0.75rem;
+        margin-right: 3px;
+    }
+
+    .item-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: #059669;
+        border-color: #059669;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    .nav-link {
+        color: #d1d5db;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+        background-color: #374151;
+        color: white;
+    }
+
+    .nav-link.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    /* Status Badge Styles */
+    .status-badge {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-Pending {
+        background-color: #FED7AA;
+        color: #9A3412;
+    }
+
+    .status-Processing {
+        background-color: #BFDBFE;
+        color: #1E40AF;
+    }
+
+    .status-Shipped {
+        background-color: #C7D2FE;
+        color: #4338CA;
+    }
+
+    .status-Delivered {
+        background-color: #BBF7D0;
+        color: #15803D;
+    }
+
+    .status-Cancelled {
+        background-color: #FCA5A5;
+        color: #B91C1C;
+    }
+
+    /* Inventory items styling */
+    .inventory-section {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .inventory-item {
+        transition: all 0.2s ease;
+        overflow: hidden;
+    }
+
+    .inventory-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .inventory-item-img-container {
+        height: 180px;
+        overflow: hidden;
+        position: relative;
+        background-color: #f8f9fa;
+    }
+
+    .inventory-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .no-img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+    }
+
+    .category-filter {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .category-filter::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .category-filter::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+
+    .filter-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .hover-elevation {
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .hover-elevation:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive adjustments for small screens */
+    @media (max-width: 768px) {
+        .stats-card {
+            margin-bottom: 15px;
+        }
+
+        .item-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+    }
+</style>

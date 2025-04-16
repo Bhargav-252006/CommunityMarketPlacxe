@@ -1,0 +1,1367 @@
+<%- include('partials/header') %>
+
+    <style>
+        /* E-commerce Color Variables - Amazon Inspired */
+        :root {
+            --main-color: #232F3E;
+            /* Amazon dark blue/black */
+            --accent-color: #FF9900;
+            /* Amazon orange */
+            --secondary-color: #146EB4;
+            /* Amazon blue */
+            --success-color: #007600;
+            /* Amazon green */
+            --warning-color: #FFD814;
+            /* Amazon yellow */
+            --info-color: #00A8E1;
+            /* Amazon light blue */
+            --danger-color: #B12704;
+            /* Amazon red */
+            --light-color: #FFFFFF;
+            /* White */
+            --dark-color: #131921;
+            /* Amazon darker navy */
+            --subtle-color: #F3F3F3;
+            /* Light gray for backgrounds */
+            --border-color: #DDD;
+            /* Border color */
+            --text-color: #0F1111;
+            /* Main text color */
+            --text-secondary: #565959;
+            /* Secondary text color */
+            --rating-star: #FFA41C;
+            /* Star rating color */
+            --button-primary: #FFD814;
+            /* Primary button color */
+            --button-primary-hover: #F7CA00;
+            /* Primary button hover */
+            --button-secondary: #FF9900;
+            /* Secondary button color */
+            --button-secondary-hover: #FA8900;
+            /* Secondary button hover */
+            --section-background: #EAEDED;
+            /* Section background color */
+        }
+
+        /* Enhanced Dashboard Styling */
+        body {
+            background-color: var(--section-background);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .transition-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .transition-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent-color) !important;
+        }
+
+        .card {
+            overflow: hidden;
+            border: none !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            background-color: var(--light-color);
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .status-badge {
+            padding: 0.5em 0.8em;
+            font-weight: 500;
+            font-size: 0.75rem;
+            border-radius: 30px;
+        }
+
+        .avatar-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            background-color: var(--main-color);
+            color: white;
+        }
+
+        /* Enhanced Responsive Styles */
+        @media (max-width: 1199.98px) {
+            .display-6 {
+                font-size: 1.8rem;
+            }
+
+            .welcome-banner .lead {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .welcome-banner .fas.fa-4x {
+                font-size: 3em;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .display-6 {
+                font-size: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .custom-card-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+
+            .custom-card-header .btn {
+                margin-top: 0.5rem;
+            }
+
+            .welcome-banner .card-body {
+                padding: 1.25rem;
+            }
+
+            .table-responsive {
+                border-radius: 0.25rem;
+            }
+
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .display-6 {
+                font-size: 1.3rem;
+            }
+
+            .welcome-banner .lead {
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+
+            .list-group-item {
+                padding: 0.75rem !important;
+            }
+
+            .list-group-item small {
+                font-size: 0.7rem;
+            }
+
+            .price-tag {
+                font-size: 1rem;
+            }
+        }
+
+        /* Section Spacing */
+        .section-title {
+            border-left: 4px solid var(--main-color);
+            padding-left: 10px;
+        }
+
+        /* Custom Badge Colors */
+        .status-Pending {
+            background-color: #fef5e7;
+            color: #cc7a00;
+            border: 1px solid #f8c471;
+        }
+
+        .status-Processing {
+            background-color: #e8f4fd;
+            color: #2e86c1;
+            border: 1px solid #7fb3d5;
+        }
+
+        .status-Shipped {
+            background-color: #eee6f8;
+            color: #6c3483;
+            border: 1px solid #c39bd3;
+        }
+
+        .status-Delivered {
+            background-color: #e9f8f4;
+            color: #16a085;
+            border: 1px solid #7dcea0;
+        }
+
+        .status-Cancelled {
+            background-color: #fcefef;
+            color: #c0392b;
+            border: 1px solid #f1948a;
+        }
+
+        /* Enhanced Button Styles - Amazon Inspired */
+        .btn-primary {
+            background-color: var(--button-primary);
+            border-color: var(--button-primary);
+            color: var(--text-color);
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+            border-color: var(--button-primary-hover);
+            color: var(--text-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            border-color: var(--button-secondary);
+            color: var(--text-color);
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover);
+            border-color: var(--button-secondary-hover);
+            color: var(--text-color);
+        }
+
+        .btn-outline-primary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            border-radius: 8px;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--light-color);
+        }
+
+        /* Product Card Styles - Amazon Inspired */
+        .product-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            background-color: var(--light-color);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+            object-position: center;
+            background-color: #f8f8f8;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        /* Image placeholder styling */
+        .image-placeholder {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f8f8 0%, #e9e9e9 100%);
+            color: #bbb;
+            transition: all 0.3s ease;
+        }
+
+        /* Loading skeleton for images */
+        .img-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loadingAnimation 1.5s infinite;
+        }
+
+        @keyframes loadingAnimation {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 2.4rem;
+            /* Fallback for browsers that don't support -webkit-line-clamp */
+        }
+
+        .price-tag {
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        /* Section Headers */
+        .custom-card-header {
+            background-color: var(--subtle-color);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 1.25rem;
+        }
+
+        .text-main {
+            color: var(--main-color) !important;
+        }
+
+        .text-accent {
+            color: var(--accent-color) !important;
+        }
+
+        .text-success {
+            color: var(--success-color) !important;
+        }
+
+        .text-warning {
+            color: var(--warning-color) !important;
+        }
+
+        /* Welcome Banner - Modern E-commerce Style */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--dark-color) 0%, var(--main-color) 100%);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            color: var(--light-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 24px;
+        }
+
+        .welcome-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80') no-repeat;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: 0;
+            transform: scale(1.05);
+            transition: transform 10s ease-out;
+        }
+
+        .welcome-banner:hover::before {
+            transform: scale(1.1);
+        }
+
+        .welcome-banner .card-body {
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light-color);
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .welcome-banner .btn {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 4px;
+        }
+
+        .welcome-banner .btn:hover {
+            background-color: var(--button-secondary-hover);
+            border-color: var(--button-secondary-hover);
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-card i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+            opacity: 0.8;
+        }
+
+        .shadow-custom {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Enhanced Category Card Styles */
+        .shop-category-section {
+            background-color: var(--subtle-color);
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .category-scroll-container {
+            position: relative;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            padding: 5px 0;
+        }
+
+        .category-scroll-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        .category-scroll-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 16px;
+            padding: 10px 5px;
+        }
+
+        .category-card-item {
+            flex: 0 0 auto;
+            width: 180px;
+            transition: transform 0.2s;
+        }
+
+        .category-card-item:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 576px) {
+            .category-card-item {
+                width: 150px;
+            }
+        }
+
+        .scroll-controls {
+            display: flex;
+        }
+
+        .scroll-left,
+        .scroll-right {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .scroll-left:hover,
+        .scroll-right:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .category-card img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .category-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .category-card h6 {
+            margin: 10px 0 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Add transition for product filtering */
+        .col-6.col-md-4.col-lg-3 {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .col-6.col-md-4.col-lg-3.filtering-hide {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        .col-6.col-md-4.col-lg-3.filtering-show {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Welcome Section -->
+            <div class="col-12">
+                <div class="welcome-banner">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <h2>Welcome back, <%= user.name %>!</h2>
+                                <% if (isAdmin) { %>
+                                    <p>You have admin privileges for this community. Manage orders and track community
+                                        activities.</p>
+                                    <a href="/admin/dashboard" class="btn">Admin Control Panel</a>
+                                    <% } else { %>
+                                        <p>Discover fresh products from trusted vendors in your neighborhood.</p>
+                                        <a href="/items" class="btn">Shop Now <i
+                                                class="fas fa-arrow-right ms-2"></i></a>
+                                        <% } %>
+                            </div>
+                            <div class="col-md-5 d-none d-md-block">
+                                <div class="welcome-stats">
+                                    <div class="stat-card">
+                                        <i class="fas fa-shopping-basket"></i>
+                                        <h3>
+                                            <%= featuredItems ? featuredItems.length : 0 %>
+                                        </h3>
+                                        <p>Featured Items</p>
+                                    </div>
+                                    <div class="stat-card">
+                                        <i class="fas fa-box"></i>
+                                        <h3>
+                                            <%= recentOrders ? recentOrders.length : 0 %>
+                                        </h3>
+                                        <p>Recent Orders</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Info Text Card -->
+            <div class="col-12 mb-4">
+                <div class="card shadow-custom">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-info-circle me-2 text-primary"></i>Community Notice</h5>
+                        <p class="card-text">
+                            Welcome to the updated Community Marketplace! We've simplified the interface for easier
+                            navigation.
+                            Items without images have been removed from the catalog for a better shopping experience.
+                            If you need assistance, please contact our support team.
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt me-1"></i> Last updated: <%= new
+                                    Date().toLocaleDateString() %>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flash Messages -->
+            <% if (messages && messages.success && messages.success.length> 0) { %>
+                <div class="col-12 mb-2">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%= messages.success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <% } %>
+
+                    <% if (messages && messages.error && messages.error.length> 0) { %>
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <%= messages.error %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <% } %>
+
+                            <!-- Featured Items -->
+                            <div class="col-12 mb-4">
+                                <div class="card shadow-custom">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="section-title mb-0"><i class="fas fa-star me-2"></i>Featured Products
+                                        </h5>
+                                        <a href="/items" class="btn btn-sm btn-outline-primary">View All <i
+                                                class="fas fa-arrow-right ms-1"></i></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <% if (featuredItems && featuredItems.length> 0) { %>
+                                                <% featuredItems.forEach(item=> { %>
+                                                    <div class="col-6 col-md-4 col-lg-3">
+                                                        <div class="card product-card h-100">
+                                                            <% if (item.imageUrl) { %>
+                                                                <img src="<%= item.imageUrl %>" class="card-img-top"
+                                                                    alt="<%= item.itemName %>" loading="lazy"
+                                                                    onerror="this.onerror=null; this.classList.add('img-error'); this.parentElement.innerHTML='<div class=\'image-placeholder\'><i class=\'fas fa-image fa-2x\'></i></div>'">
+                                                                <% } else { %>
+                                                                    <div class="image-placeholder">
+                                                                        <i class="fas fa-box-open fa-2x"></i>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <div class="card-body d-flex flex-column">
+                                                                            <div
+                                                                                class="d-flex align-items-start justify-content-between mb-1">
+                                                                                <span
+                                                                                    class="badge bg-success bg-opacity-10 text-success">New</span>
+                                                                                <button
+                                                                                    class="btn btn-sm btn-link text-secondary p-0 border-0">
+                                                                                    <i class="far fa-heart"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <h5 class="product-title">
+                                                                                <%= item.itemName %>
+                                                                            </h5>
+                                                                            <p class="small text-muted mb-1">
+                                                                                <i class="fas fa-store-alt me-1"></i>
+                                                                                <%= item.vendorId.businessName %>
+                                                                            </p>
+                                                                            <div class="text-warning mb-2">
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star"></i>
+                                                                                <i class="fas fa-star-half-alt"></i>
+                                                                                <span
+                                                                                    class="ms-1 text-muted">(4.5)</span>
+                                                                            </div>
+                                                                            <div
+                                                                                class="d-flex justify-content-between align-items-center mt-auto">
+                                                                                <div>
+                                                                                    <span class="product-price">₹<%=
+                                                                                            item.costPerUnit.toFixed(2)
+                                                                                            %></span>
+                                                                                    <span class="small text-muted">/<%=
+                                                                                            item.unit %></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <form action="/cart/add" method="POST"
+                                                                                class="mt-2">
+                                                                                <input type="hidden" name="itemId"
+                                                                                    value="<%= item._id %>">
+                                                                                <input type="hidden" name="quantity"
+                                                                                    value="1">
+                                                                                <input type="hidden"
+                                                                                    name="returnToItems" value="true">
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary w-100">
+                                                                                    <i
+                                                                                        class="fas fa-cart-plus me-2"></i>Add
+                                                                                    to Cart
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <div class="col-12">
+                                                                <div class="text-center py-5">
+                                                                    <i
+                                                                        class="fas fa-shopping-basket fa-3x text-muted mb-3"></i>
+                                                                    <h5 class="text-muted">No featured items available
+                                                                    </h5>
+                                                                    <p class="text-muted small mb-3">Check back soon or
+                                                                        browse all items in our store</p>
+                                                                    <a href="/items" class="btn btn-primary">Browse All
+                                                                        Products</a>
+                                                                </div>
+                                                            </div>
+                                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        </div>
+
+        <!-- Recent Orders Row -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card shadow-custom">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="section-title mb-0"><i class="fas fa-box me-2"></i>Your Recent Orders</h5>
+                        <a href="/orders" class="btn btn-sm btn-outline-primary">View All <i
+                                class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <% if (recentOrders && recentOrders.length> 0) { %>
+                            <div class="table-responsive rounded">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% recentOrders.forEach(order=> { %>
+                                            <tr>
+                                                <td>
+                                                    <span class="fw-medium text-secondary">#<%=
+                                                            order._id.toString().substring(0, 8).toUpperCase() %></span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge rounded-pill bg-light text-dark me-2">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
+                                                        <span class="d-none d-sm-inline">
+                                                            <%= new Date(order.createdAt).toLocaleDateString('en-US',
+                                                                {year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                                        </span>
+                                                        <span class="d-inline d-sm-none">
+                                                            <%= new Date(order.createdAt).toLocaleDateString('en-US',
+                                                                {month: 'numeric' , day: 'numeric' }) %>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="fw-bold product-price">₹<%=
+                                                            order.totalAmount.toFixed(2) %></span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge status-badge status-<%= order.status %>">
+                                                        <%= order.status %>
+                                                    </span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <a href="/orders/<%= order._id %>" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-eye me-1"></i><span
+                                                            class="d-none d-sm-inline">Details</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } else { %>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">No orders yet</h5>
+                                    <p class="text-muted small mb-3">Your order history will appear here once you make a
+                                        purchase</p>
+                                    <a href="/items" class="btn btn-primary">
+                                        <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+                                    </a>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (isAdmin && pendingOrders && pendingOrders.length> 0) { %>
+            <!-- Pending Orders (Admin Only) -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card shadow-custom">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="section-title mb-0"><i class="fas fa-clock me-2"></i>Pending Orders</h5>
+                            <span class="badge rounded-pill bg-warning text-dark px-3 py-2">
+                                <%= pendingOrders.length %>
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive rounded">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th class="d-none d-md-table-cell">Date</th>
+                                            <th>Items</th>
+                                            <th>Total</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% pendingOrders.forEach(order=> { %>
+                                            <tr>
+                                                <td>
+                                                    <span class="fw-medium text-secondary">#<%=
+                                                            order._id.toString().substring(0, 8).toUpperCase() %></span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2 text-center"
+                                                            style="width: 36px; height: 36px; line-height: 20px;">
+                                                            <%= (order.customerId && order.customerId.name) ?
+                                                                order.customerId.name.charAt(0).toUpperCase() : 'U' %>
+                                                        </div>
+                                                        <span class="d-inline text-truncate" style="max-width: 120px;">
+                                                            <%= order.customerId ? order.customerId.name : 'Unknown' %>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="d-none d-md-table-cell">
+                                                    <%= new Date(order.createdAt).toLocaleDateString('en-US',
+                                                        {year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-light text-dark">
+                                                        <%= order.items.length %> items
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="fw-bold product-price">₹<%=
+                                                            order.totalAmount.toFixed(2) %></span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="/orders/<%= order._id %>"
+                                                            class="btn btn-outline-secondary">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a href="/group-orders/add/<%= order._id %>"
+                                                            class="btn btn-outline-success">
+                                                            <i class="fas fa-plus"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+                <% if (isAdmin && groupOrders && groupOrders.length> 0) { %>
+                    <!-- Recent Group Orders (Admin Only) -->
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <div class="card shadow-custom">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="section-title mb-0"><i class="fas fa-layer-group me-2"></i>Group Orders
+                                    </h5>
+                                    <a href="/group-orders" class="btn btn-sm btn-outline-primary">Manage All <i
+                                            class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive rounded">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Group ID</th>
+                                                    <th class="d-none d-md-table-cell">Date</th>
+                                                    <th>Orders</th>
+                                                    <th>Users</th>
+                                                    <th>Total</th>
+                                                    <th>Status</th>
+                                                    <th class="text-end">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% groupOrders.forEach(groupOrder=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="fw-medium text-secondary">#<%=
+                                                                    groupOrder._id.toString().substring(0,
+                                                                    8).toUpperCase() %></span>
+                                                        </td>
+                                                        <td class="d-none d-md-table-cell">
+                                                            <%= new
+                                                                Date(groupOrder.createdAt).toLocaleDateString('en-US',
+                                                                {year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-info bg-opacity-10 text-info">
+                                                                <i class="fas fa-box me-1"></i>
+                                                                <%= groupOrder.orders.length %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex flex-nowrap">
+                                                                <% // Create a map to count unique users const
+                                                                    userMap=new Map(); let userList=[]; if
+                                                                    (groupOrder.orders && groupOrder.orders.length> 0) {
+                                                                    groupOrder.orders.forEach(order => {
+                                                                    if (order.customerId) {
+                                                                    const userId = order.customerId._id ||
+                                                                    order.customerId;
+                                                                    const userName = order.customerId.name || 'User';
+
+                                                                    if (!userMap.has(userId.toString())) {
+                                                                    userMap.set(userId.toString(), {
+                                                                    name: userName,
+                                                                    orders: 1
+                                                                    });
+                                                                    userList.push({
+                                                                    id: userId,
+                                                                    name: userName
+                                                                    });
+                                                                    } else {
+                                                                    const user = userMap.get(userId.toString());
+                                                                    user.orders++;
+                                                                    }
+                                                                    }
+                                                                    });
+                                                                    }
+
+                                                                    // Display up to 3 users
+                                                                    const maxDisplay = 3;
+                                                                    const displayCount = Math.min(userList.length,
+                                                                    maxDisplay);
+
+                                                                    for (let i = 0; i < displayCount; i++) { const
+                                                                        user=userList[i]; const
+                                                                        initial=user.name.charAt(0).toUpperCase(); %>
+                                                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-1 text-center me-1"
+                                                                            style="width: 28px; height: 28px; line-height: 20px;"
+                                                                            data-bs-toggle="tooltip"
+                                                                            title="<%= user.name %>">
+                                                                            <%= initial %>
+                                                                        </div>
+                                                                        <% } %>
+
+                                                                            <% if (userList.length> maxDisplay) { %>
+                                                                                <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle p-1 text-center"
+                                                                                    style="width: 28px; height: 28px; line-height: 20px;"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    title="<%= userList.length - maxDisplay %> more users">
+                                                                                    +<%= userList.length - maxDisplay %>
+                                                                                </div>
+                                                                                <% } %>
+
+                                                                                    <% if (userList.length===0) { %>
+                                                                                        <span
+                                                                                            class="text-muted small">No
+                                                                                            user data</span>
+                                                                                        <% } %>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="fw-bold product-price">₹<%=
+                                                                    groupOrder.totalAmount.toFixed(2) %></span>
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                class="badge status-badge status-<%= groupOrder.status %>">
+                                                                <%= groupOrder.status %>
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <div class="btn-group btn-group-sm">
+                                                                <a href="/group-orders/<%= groupOrder._id %>"
+                                                                    class="btn btn-secondary">
+                                                                    <i class="fas fa-eye me-1"></i><span
+                                                                        class="d-none d-sm-inline">Details</span>
+                                                                </a>
+                                                                <button type="button" class="btn btn-outline-info"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#userListModal-<%= groupOrder._id %>">
+                                                                    <i class="fas fa-users"></i>
+                                                                </button>
+                                                            </div>
+
+                                                            <!-- User List Modal -->
+                                                            <div class="modal fade"
+                                                                id="userListModal-<%= groupOrder._id %>" tabindex="-1"
+                                                                aria-labelledby="userListModalLabel-<%= groupOrder._id %>"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="userListModalLabel-<%= groupOrder._id %>">
+                                                                                Users in Group Order #<%=
+                                                                                    groupOrder._id.toString().substring(0,
+                                                                                    8).toUpperCase() %>
+                                                                            </h5>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <% if (userList.length> 0) { %>
+                                                                                <div class="list-group">
+                                                                                    <% Array.from(userMap.entries()).forEach(([userId,
+                                                                                        userData])=> { %>
+                                                                                        <div
+                                                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                            <div>
+                                                                                                <div
+                                                                                                    class="d-flex align-items-center">
+                                                                                                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3"
+                                                                                                        style="width: 40px; height: 40px; line-height: 24px; text-align: center">
+                                                                                                        <%= userData.name.charAt(0).toUpperCase()
+                                                                                                            %>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                        <h6
+                                                                                                            class="mb-0">
+                                                                                                            <%= userData.name
+                                                                                                                %>
+                                                                                                        </h6>
+                                                                                                        <small
+                                                                                                            class="text-muted">
+                                                                                                            <%= userData.orders
+                                                                                                                %> order
+                                                                                                                <%=
+                                                                                                                    userData.orders>
+                                                                                                                    1 ?
+                                                                                                                    's'
+                                                                                                                    : ''
+                                                                                                                    %>
+                                                                                                        </small>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <a href="/admin/view-user-items/<%= userId %>"
+                                                                                                class="btn btn-sm btn-outline-primary">
+                                                                                                <i
+                                                                                                    class="fas fa-shopping-cart me-1"></i>View
+                                                                                                Cart
+                                                                                            </a>
+                                                                                        </div>
+                                                                                        <% }); %>
+                                                                                </div>
+                                                                                <% } else { %>
+                                                                                    <div class="alert alert-info mb-0">
+                                                                                        <i
+                                                                                            class="fas fa-info-circle me-2"></i>No
+                                                                                        user data available for this
+                                                                                        group order.
+                                                                                    </div>
+                                                                                    <% } %>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">Close</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+
+                        <!-- Deals of the Day (Show for regular users) -->
+                        <% if (!isAdmin) { %>
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card shadow-custom">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="section-title mb-0"><i class="fas fa-bolt me-2"></i>Deals of the
+                                                Day</h5>
+                                            <span class="badge bg-danger text-white">Limited Time</span>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="p-4 bg-light text-center rounded-top">
+                                                <h4 class="mb-3">Special Discounts</h4>
+                                                <p class="text-muted mb-4">Don't miss these amazing offers from our
+                                                    community vendors!</p>
+                                                <div class="row justify-content-center">
+                                                    <div class="col-auto">
+                                                        <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center"
+                                                            style="width: 80px; height: 80px;">
+                                                            <div>
+                                                                <div class="fw-bold" style="font-size: 1.5rem;">20%
+                                                                </div>
+                                                                <div style="font-size: 0.8rem;">OFF</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                                            style="width: 80px; height: 80px;">
+                                                            <div>
+                                                                <div class="fw-bold" style="font-size: 1.5rem;">Buy 1
+                                                                </div>
+                                                                <div style="font-size: 0.8rem;">Get 1</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                                                            style="width: 80px; height: 80px;">
+                                                            <div>
+                                                                <div class="fw-bold" style="font-size: 1.5rem;">Free
+                                                                </div>
+                                                                <div style="font-size: 0.8rem;">Delivery</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <a href="/items?discount=true" class="btn btn-danger px-4">Shop All
+                                                        Deals</a>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="countdown-timer bg-dark text-white p-3 d-flex justify-content-center align-items-center text-center">
+                                                <div>
+                                                    <span class="small">Offers end in:</span>
+                                                    <div class="d-flex justify-content-center gap-3 mt-1">
+                                                        <div>
+                                                            <span class="fw-bold">12</span>
+                                                            <span class="small d-block">Hours</span>
+                                                        </div>
+                                                        <div class="fw-bold">:</div>
+                                                        <div>
+                                                            <span class="fw-bold">45</span>
+                                                            <span class="small d-block">Mins</span>
+                                                        </div>
+                                                        <div class="fw-bold">:</div>
+                                                        <div>
+                                                            <span class="fw-bold">30</span>
+                                                            <span class="small d-block">Secs</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+    </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+        <script src="/js/categoryHelper.js"></script>
+        <script>
+            // Initialize tooltips
+            document.addEventListener('DOMContentLoaded', function () {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+
+                // Enhanced image loading
+                const productImages = document.querySelectorAll('.card-img-top');
+                productImages.forEach(img => {
+                    // Add loading class
+                    img.classList.add('img-loading');
+
+                    // Remove loading class when image loads
+                    img.addEventListener('load', function () {
+                        // Fade in effect
+                        setTimeout(() => {
+                            this.classList.remove('img-loading');
+                            this.style.opacity = '0';
+                            setTimeout(() => {
+                                this.style.transition = 'opacity 0.5s ease';
+                                this.style.opacity = '1';
+                            }, 50);
+                        }, 300);
+                    });
+
+                    // Handle image load errors
+                    img.addEventListener('error', function () {
+                        this.classList.remove('img-loading');
+                        // Replace with placeholder if image fails to load
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'image-placeholder';
+                        placeholder.innerHTML = '<i class="fas fa-image fa-2x"></i>';
+                        this.parentNode.replaceChild(placeholder, this);
+                    });
+                });
+
+                // Category scrolling
+                const container = document.querySelector('.category-scroll-container');
+                const leftBtn = document.querySelector('.scroll-left');
+                const rightBtn = document.querySelector('.scroll-right');
+
+                if (leftBtn && rightBtn && container) {
+                    // Scroll right
+                    rightBtn.addEventListener('click', function () {
+                        container.scrollBy({ left: 400, behavior: 'smooth' });
+                    });
+
+                    // Scroll left
+                    leftBtn.addEventListener('click', function () {
+                        container.scrollBy({ left: -400, behavior: 'smooth' });
+                    });
+                }
+
+                // Handle category filter clicks
+                const categoryFilters = document.querySelectorAll('.category-filter');
+                const productItems = document.querySelectorAll('.col-6.col-md-4.col-lg-3');
+
+                // Set "All Items" as default active category
+                const allItemsFilter = document.querySelector('.category-filter[data-category="All Items"]');
+                if (allItemsFilter) {
+                    allItemsFilter.querySelector('.category-card').classList.add('active');
+                }
+
+                categoryFilters.forEach(filter => {
+                    filter.addEventListener('click', function () {
+                        // Remove active class from all filters
+                        categoryFilters.forEach(f => f.querySelector('.category-card').classList.remove('active'));
+
+                        // Add active class to clicked filter
+                        this.querySelector('.category-card').classList.add('active');
+
+                        const selectedCategory = this.getAttribute('data-category');
+                        console.log('Selected category:', selectedCategory);
+
+                        // Show/hide products based on category
+                        productItems.forEach(item => {
+                            const productCard = item.querySelector('.product-card');
+                            if (!productCard) return;
+
+                            // Try to find category from various sources
+                            let itemCategory = '';
+                            const titleElement = productCard.querySelector('.product-title');
+                            const vendorElement = productCard.querySelector('.small.text-muted');
+
+                            if (titleElement) {
+                                itemCategory = titleElement.textContent.trim();
+                            }
+
+                            if (selectedCategory === 'All Items') {
+                                // Show with animation
+                                item.classList.remove('filtering-hide');
+                                setTimeout(() => {
+                                    item.classList.add('filtering-show');
+                                    item.style.display = 'block';
+                                }, 10);
+                            } else if (
+                                // Check if product item might belong to the selected category
+                                itemCategory.includes(selectedCategory) ||
+                                (vendorElement && vendorElement.textContent.includes(selectedCategory))
+                            ) {
+                                // Show with animation
+                                item.classList.remove('filtering-hide');
+                                setTimeout(() => {
+                                    item.classList.add('filtering-show');
+                                    item.style.display = 'block';
+                                }, 10);
+                            } else {
+                                // Hide with animation
+                                item.classList.add('filtering-hide');
+                                item.classList.remove('filtering-show');
+                                setTimeout(() => {
+                                    item.style.display = 'none';
+                                }, 300); // Match transition duration
+                            }
+                        });
+                    });
+                });
+            });
+        </script>

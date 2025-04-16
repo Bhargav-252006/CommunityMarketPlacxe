@@ -1,0 +1,33 @@
+<!-- Standard Alert Messages -->
+
+<!-- For single message variable -->
+<% if (typeof message !== 'undefined' && message) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<!-- For error variable -->
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<!-- For flash messages.success -->
+<% if (typeof messages !== 'undefined' && messages && messages.success) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %>
+
+<!-- For flash messages.error -->
+<% if (typeof messages !== 'undefined' && messages && messages.error) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<% } %> 

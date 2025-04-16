@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Manager | <%= community.name %>
+    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin/dashboard">
+                <i class="bi bi-shop me-2"></i>
+                <%= community.name %> Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/dashboard">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/community-carts">
+                            <i class="bi bi-cart3 me-1"></i> Community Carts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/group-orders">
+                            <i class="bi bi-box-seam me-1"></i> Group Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/all-orders">
+                            <i class="bi bi-list-check me-1"></i> All Orders
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/logout" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Welcome to <%= community.name %> Management Dashboard</h3>
+                        <p class="card-text">Community ID: <strong>
+                                <%= community.communityId %>
+                            </strong></p>
+                        <p class="card-text">
+                            <%= community.description %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Community Members</h5>
+                        <p class="display-4">
+                            <%= users.length %>
+                        </p>
+                        <a href="#membersList" class="text-white">View all members</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Active Carts</h5>
+                        <p class="display-4" id="activeCartsCount">--</p>
+                        <a href="/admin/community-carts" class="text-white">Manage carts</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Group Orders</h5>
+                        <p class="display-4" id="groupOrdersCount">--</p>
+                        <a href="/admin/group-orders" class="text-white">View orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h4 id="membersList">Community Members</h4>
+                    </div>
+                    <div class="card-body">
+                        <% if (users.length===0) { %>
+                            <div class="alert alert-info">
+                                No community members found. Invite people to join your community!
+                            </div>
+                            <% } else { %>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Joined</th>
+                                                <th>Cart Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% users.forEach(user=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= user.name %>
+                                                    </td>
+                                                    <td>
+                                                        <%= user.username %>
+                                                    </td>
+                                                    <td>
+                                                        <%= user.email %>
+                                                    </td>
+                                                    <td>
+                                                        <%= new Date(user.createdAt).toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (user.hasActiveCart) { %>
+                                                            <span class="badge bg-success">
+                                                                <i class="bi bi-cart-check-fill me-1"></i>
+                                                                Active Cart
+                                                            </span>
+                                                            <% } else { %>
+                                                                <span class="badge bg-secondary">
+                                                                    <i class="bi bi-cart me-1"></i>
+                                                                    No Items
+                                                                </span>
+                                                                <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/view-user-items/<%= user._id %>"
+                                                            class="btn btn-sm btn-outline-primary">
+                                                            <i class="bi bi-cart3"></i> View User Items
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>Recent Orders</h4>
+                            <a href="/admin/all-orders" class="btn btn-primary btn-sm">
+                                <i class="bi bi-list-check me-1"></i> View All Orders
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <% if (!recentOrders || recentOrders.length===0) { %>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i> No recent orders found.
+                            </div>
+                            <% } else { %>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>User</th>
+                                                <th>Date</th>
+                                                <th>Items</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% recentOrders.forEach(order=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <a href="/admin/order/<%= order._id %>"
+                                                            class="text-decoration-none">
+                                                            <code><%= order._id.toString().substring(0, 8) %></code>
+                                                            <i
+                                                                class="bi bi-box-arrow-up-right ms-1 small text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <% if (order.customerId && order.customerId.name) { %>
+                                                            <%= order.customerId.name %>
+                                                                <% } else { %>
+                                                                    <span class="text-muted">Unknown User</span>
+                                                                    <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.items ? order.items.length : 0 %> items
+                                                    </td>
+                                                    <td>₹<%= order.totalAmount ? order.totalAmount.toFixed(2) : '0.00'
+                                                            %>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge <%= 
+                                                        order.status === 'Processing' ? 'bg-primary' : 
+                                                        order.status === 'Shipped' ? 'bg-info' : 
+                                                        order.status === 'Delivered' ? 'bg-success' : 
+                                                        order.status === 'Cancelled' ? 'bg-danger' : 
+                                                        'bg-warning' %>">
+                                                            <%= order.status %>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>Quick Actions</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="/admin/community-carts" class="btn btn-lg btn-success w-100 mb-2">
+                                    <i class="bi bi-cart-plus"></i> Create Group Order
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/group-orders" class="btn btn-lg btn-info w-100 mb-2">
+                                    <i class="bi bi-box-seam"></i> View Group Orders
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/all-orders" class="btn btn-lg btn-primary w-100 mb-2">
+                                    <i class="bi bi-list-check"></i> Manage All Orders
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Group Order Management</h4>
+                        <p class="card-text">
+                            <% if (activeCartCount> 0) { %>
+                                <span class="badge bg-primary">
+                                    <%= activeCartCount %> active cart<%= activeCartCount===1 ? '' : 's' %>
+                                </span>
+                                Community members have added items to their carts that are waiting for a group order.
+                                <% } else { %>
+                                    No community members have items in their carts yet.
+                                    <% } %>
+                        </p>
+                        <a href="/admin/community-carts" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart me-2"></i> View Community Carts & Create Group Order
+                        </a>
+                        <a href="/admin/group-orders" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-history me-2"></i> View Past Group Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to update dashboard data
+        async function updateDashboardData() {
+            try {
+                // Fetch active carts count
+                const cartsResponse = await fetch('/api/admin/cart-count');
+                if (cartsResponse.ok) {
+                    const cartsData = await cartsResponse.json();
+                    document.getElementById('activeCartsCount').textContent = cartsData.count;
+                }
+
+                // Fetch group orders count
+                const ordersResponse = await fetch('/api/admin/group-order-count');
+                if (ordersResponse.ok) {
+                    const ordersData = await ordersResponse.json();
+                    document.getElementById('groupOrdersCount').textContent = ordersData.count;
+                }
+            } catch (err) {
+                console.error('Error fetching dashboard data:', err);
+                // Fallback to estimated counts
+                if (document.getElementById('activeCartsCount').textContent === '--') {
+                    document.getElementById('activeCartsCount').textContent = '~';
+                }
+                if (document.getElementById('groupOrdersCount').textContent === '--') {
+                    document.getElementById('groupOrdersCount').textContent = '~';
+                }
+            }
+        }
+
+        // Initial load of dashboard data
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDashboardData();
+
+            // Refresh dashboard data every 30 seconds
+            setInterval(updateDashboardData, 30000);
+        });
+    </script>
+</body>
+
+</html>

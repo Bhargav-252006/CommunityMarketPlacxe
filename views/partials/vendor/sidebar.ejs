@@ -1,0 +1,51 @@
+<!-- views/partials/vendor/sidebar.ejs -->
+<div class="col-md-3 col-lg-2 sidebar">
+    <div class="sidebar-sticky">
+        <!-- Vendor Info -->
+        <div class="vendor-info mb-4">
+            <h5>
+                <%= typeof vendor !=='undefined' && vendor ? vendor.businessName : 'Vendor Dashboard' %>
+            </h5>
+            <small class="text-muted">Welcome back!</small>
+        </div>
+
+        <!-- Navigation -->
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'dashboard' ? 'active' : '' %>"
+                    href="/vendor/dashboard" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'items' ? 'active' : '' %>"
+                    href="/vendor/items" data-page="items">
+                    <i class="fas fa-box me-2"></i> Items
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'orders' ? 'active' : '' %>"
+                    href="/vendor/orders" data-page="orders">
+                    <i class="fas fa-shopping-cart me-2"></i> Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'settings' ? 'active' : '' %>"
+                    href="/vendor/settings" data-page="settings">
+                    <i class="fas fa-cog me-2"></i> Settings
+                </a>
+            </li>
+        </ul>
+
+        <hr class="my-4">
+
+        <!-- Logout Option -->
+        <ul class="nav flex-column mt-auto">
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="/logout">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

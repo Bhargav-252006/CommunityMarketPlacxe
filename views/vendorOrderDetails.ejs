@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include('./partials/vendor/sidebar.ejs') %>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9 col-lg-10 main-content">
+                        <div class="mb-4">
+                            <a href="/vendor/orders" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Orders
+                            </a>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="order-header">
+                                    <div>
+                                        <span class="order-id">Order #
+                                            <% if (order.orderId) { %>
+                                                <%= order.orderId %>
+                                                    <% } else { %>
+                                                        <%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                                            <% } %>
+                                        </span>
+                                        <div class="text-muted">Placed on <%= new
+                                                Date(order.createdAt).toLocaleDateString() %>
+                                                at <%= new Date(order.createdAt).toLocaleTimeString() %>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <% var mostCommonStatus='Pending' ; %>
+                                            <span class="badge status-badge status-<%= mostCommonStatus %>">
+                                                <%= mostCommonStatus %>
+                                            </span>
+                                    </div>
+                                </div>
+
+                                <!-- Customer Information -->
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Customer Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Name:</strong>
+                                                    <% if (order.customerId && order.customerId.name) { %>
+                                                        <%= order.customerId.name %>
+                                                            <% } else { %>
+                                                                N/A
+                                                                <% } %>
+                                                </p>
+                                                <p><strong>Username:</strong>
+                                                    <% if (order.customerId && order.customerId.username) { %>
+                                                        <%= order.customerId.username %>
+                                                            <% } else { %>
+                                                                N/A
+                                                                <% } %>
+                                                </p>
+                                                <p><strong>Email:</strong>
+                                                    <% if (order.customerId && order.customerId.email) { %>
+                                                        <%= order.customerId.email %>
+                                                            <% } else { %>
+                                                                N/A
+                                                                <% } %>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <% if (order.isGroupOrder && order.groupOrderId) { %>
+                                                    <div class="alert alert-info">
+                                                        <strong>Part of Group Order:</strong> #<%=
+                                                            order.groupOrderId._id.toString().substring(0,
+                                                            8).toUpperCase() %>
+                                                            <p class="mb-0 mt-1">Group Status:
+                                                                <span
+                                                                    class="badge status-badge status-<%= order.groupOrderId.status %>">
+                                                                    <%= order.groupOrderId.status %>
+                                                                </span>
+                                                            </p>
+                                                    </div>
+                                                    <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="order-info-grid mb-4">
+                                    <div class="order-info-item">
+                                        <div class="order-info-label">Order ID</div>
+                                        <div class="order-info-value">
+                                            #<% if (order.orderId) { %>
+                                                <%= order.orderId %>
+                                                    <% } else { %>
+                                                        <%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                                            <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="order-info-item">
+                                        <div class="order-info-label">Order Date</div>
+                                        <div class="order-info-value">
+                                            <%= new Date(order.createdAt).toLocaleDateString() %>
+                                        </div>
+                                    </div>
+                                    <div class="order-info-item">
+                                        <div class="order-info-label">Order Status</div>
+                                        <div class="order-info-value">
+                                            <span class="badge status-badge status-<%= order.status %>">
+                                                <%= order.status %>
+                                            </span>
+                                            <% if (order.status==='Pending' ) { %>
+                                                <button type="button" class="btn btn-sm btn-success ms-2"
+                                                    data-bs-toggle="modal" data-bs-target="#acceptOrderModal">
+                                                    Accept Order
+                                                </button>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="order-info-item">
+                                        <div class="order-info-label">Total Amount</div>
+                                        <div class="order-info-value">₹<%= order.totalAmount.toFixed(2) %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Actions Section -->
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Quick Actions</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <% if (order.status==='Pending' ) { %>
+                                                <form action="/vendor/orders/accept/<%= order._id %>" method="POST">
+                                                    <button type="submit" class="btn btn-success"
+                                                        onclick="return confirm('Are you sure you want to accept this order and mark all items as Processing?')">
+                                                        <i class="fas fa-check me-1"></i> Accept Order
+                                                    </button>
+                                                </form>
+                                                <% } %>
+
+                                                    <% if (order.status==='Processing' ) { %>
+                                                        <form action="/vendor/orders/update-all-items/<%= order._id %>"
+                                                            method="POST">
+                                                            <input type="hidden" name="status" value="Shipped">
+                                                            <button type="submit" class="btn btn-info"
+                                                                onclick="return confirm('Are you sure you want to mark all items as Shipped?')">
+                                                                <i class="fas fa-shipping-fast me-1"></i> Ship All Items
+                                                            </button>
+                                                        </form>
+                                                        <% } %>
+
+                                                            <% if (order.status==='Shipped' ) { %>
+                                                                <form
+                                                                    action="/vendor/orders/update-all-items/<%= order._id %>"
+                                                                    method="POST">
+                                                                    <input type="hidden" name="status"
+                                                                        value="Delivered">
+                                                                    <button type="submit" class="btn btn-success"
+                                                                        onclick="return confirm('Are you sure you want to mark all items as Delivered?')">
+                                                                        <i class="fas fa-check-circle me-1"></i> Mark
+                                                                        All as Delivered
+                                                                    </button>
+                                                                </form>
+                                                                <% } %>
+
+                                                                    <% if (order.status !=='Cancelled' && order.status
+                                                                        !=='Delivered' ) { %>
+                                                                        <form
+                                                                            action="/vendor/orders/update-all-items/<%= order._id %>"
+                                                                            method="POST">
+                                                                            <input type="hidden" name="status"
+                                                                                value="Cancelled">
+                                                                            <button type="submit" class="btn btn-danger"
+                                                                                onclick="return confirm('Are you sure you want to cancel this entire order?')">
+                                                                                <i class="fas fa-times-circle me-1"></i>
+                                                                                Cancel Order
+                                                                            </button>
+                                                                        </form>
+                                                                        <% } %>
+
+                                                                            <button type="button"
+                                                                                class="btn btn-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#updateAllItemsModal">
+                                                                                <i class="fas fa-edit me-1"></i> Custom
+                                                                                Status Update
+                                                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5 class="mb-3">Order Items</h5>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 60px;">Image</th>
+                                                <th>Item</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% vendorItems.forEach(function(item) { %>
+                                                <tr>
+                                                    <td>
+                                                        <div class="item-image-container"
+                                                            style="width: 50px; height: 50px; position: relative;">
+                                                            <% if (item.details && item.details.imageUrl) { %>
+                                                                <img src="<%= item.details.imageUrl %>"
+                                                                    alt="<%= item.details.itemName %>"
+                                                                    class="item-image">
+                                                                <% } else { %>
+                                                                    <div
+                                                                        class="item-image bg-light d-flex align-items-center justify-content-center">
+                                                                        <i class="fas fa-box text-muted"></i>
+                                                                    </div>
+                                                                    <% } %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <% if (item.details && item.details.itemName) { %>
+                                                                <%= item.details.itemName %>
+                                                                    <% } else { %>
+                                                                        Unknown Item
+                                                                        <% } %>
+                                                        </div>
+                                                        <small class="text-muted">
+                                                            <% if (item.details && item.details.itemId) { %>
+                                                                <%= item.details.itemId %>
+                                                                    <% } else { %>
+
+                                                                        <% } %>
+                                                        </small>
+                                                    </td>
+                                                    <td>₹
+                                                        <% if (item.details && item.details.costPerUnit) { %>
+                                                            <%= item.details.costPerUnit.toFixed(2) %>
+                                                                <% } else { %>
+                                                                    0.00
+                                                                    <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.quantity %>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            class="badge status-badge status-<% if (item.status) { %><%= item.status %><% } else { %>Pending<% } %>">
+                                                            <% if (item.status) { %>
+                                                                <%= item.status %>
+                                                                    <% } else { %>
+                                                                        Pending
+                                                                        <% } %>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <% if (item.status==='Pending' || item.status==='Processing' ) {
+                                                            %>
+                                                            <div class="btn-group">
+                                                                <form
+                                                                    action="/vendor/orders/update-status/<%= order._id %>"
+                                                                    method="POST" class="me-1">
+                                                                    <input type="hidden" name="itemId"
+                                                                        value="<%= item.itemId %>">
+                                                                    <input type="hidden" name="status" value="Shipped">
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btn-success">
+                                                                        <i class="fas fa-shipping-fast me-1"></i> Ship
+                                                                    </button>
+                                                                </form>
+                                                                <form
+                                                                    action="/vendor/orders/update-status/<%= order._id %>"
+                                                                    method="POST" class="me-1">
+                                                                    <input type="hidden" name="itemId"
+                                                                        value="<%= item.itemId %>">
+                                                                    <input type="hidden" name="status"
+                                                                        value="Cancelled">
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fas fa-times-circle me-1"></i> Cancel
+                                                                    </button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-sm btn-secondary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#updateStatusModal<%= item.itemId %>">
+                                                                    <i class="fas fa-edit me-1"></i> More
+                                                                </button>
+                                                            </div>
+                                                            <% } else if (item.status==='Shipped' ) { %>
+                                                                <div class="btn-group">
+                                                                    <form
+                                                                        action="/vendor/orders/update-status/<%= order._id %>"
+                                                                        method="POST" class="me-1">
+                                                                        <input type="hidden" name="itemId"
+                                                                            value="<%= item.itemId %>">
+                                                                        <input type="hidden" name="status"
+                                                                            value="Delivered">
+                                                                        <button type="submit"
+                                                                            class="btn btn-sm btn-success">
+                                                                            <i class="fas fa-check-circle me-1"></i>
+                                                                            Mark
+                                                                            Delivered
+                                                                        </button>
+                                                                    </form>
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-secondary"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#updateStatusModal<%= item.itemId %>">
+                                                                        <i class="fas fa-edit me-1"></i> Change
+                                                                    </button>
+                                                                </div>
+                                                                <% } else if (item.status==='Cancelled' ) { %>
+                                                                    <div class="btn-group">
+                                                                        <form
+                                                                            action="/vendor/orders/update-status/<%= order._id %>"
+                                                                            method="POST" class="me-1">
+                                                                            <input type="hidden" name="itemId"
+                                                                                value="<%= item.itemId %>">
+                                                                            <input type="hidden" name="status"
+                                                                                value="Processing">
+                                                                            <button type="submit"
+                                                                                class="btn btn-sm btn-warning">
+                                                                                <i class="fas fa-redo me-1"></i>
+                                                                                Reactivate
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        <button type="button"
+                                                                            class="btn btn-sm btn-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#updateStatusModal<%= item.itemId %>">
+                                                                            <i class="fas fa-edit me-1"></i> Update
+                                                                            Status
+                                                                        </button>
+                                                                        <% } %>
+
+                                                                            <!-- Status Update Modal -->
+                                                                            <div class="modal fade"
+                                                                                id="updateStatusModal<%= item.itemId %>"
+                                                                                tabindex="-1"
+                                                                                aria-labelledby="updateStatusModalLabel<%= item.itemId %>"
+                                                                                aria-hidden="true">
+                                                                                <div class="modal-dialog">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h5 class="modal-title"
+                                                                                                id="updateStatusModalLabel<%= item.itemId %>">
+                                                                                                Update Item Status
+                                                                                            </h5>
+                                                                                            <button type="button"
+                                                                                                class="btn-close"
+                                                                                                data-bs-dismiss="modal"
+                                                                                                aria-label="Close"></button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            <form
+                                                                                                action="/vendor/orders/update-status/<%= order._id %>"
+                                                                                                method="POST">
+                                                                                                <input type="hidden"
+                                                                                                    name="itemId"
+                                                                                                    value="<%= item.itemId %>">
+                                                                                                <div class="mb-3">
+                                                                                                    <label
+                                                                                                        for="status<%= item.itemId %>"
+                                                                                                        class="form-label">Status</label>
+                                                                                                    <select
+                                                                                                        class="form-select"
+                                                                                                        id="status<%= item.itemId %>"
+                                                                                                        name="status">
+                                                                                                        <% for(var i=0;
+                                                                                                            i <
+                                                                                                            orderStatuses.length;
+                                                                                                            i++) { %>
+                                                                                                            <option
+                                                                                                                value="<%= orderStatuses[i] %>"
+                                                                                                                <%=(item.status===orderStatuses[i])
+                                                                                                                ? 'selected'
+                                                                                                                : '' %>>
+                                                                                                                <%= orderStatuses[i]
+                                                                                                                    %>
+                                                                                                            </option>
+                                                                                                            <% } %>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="d-grid">
+                                                                                                    <button
+                                                                                                        type="submit"
+                                                                                                        class="btn btn-primary">Update
+                                                                                                        Status</button>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h5 class="mb-3">Order Status Timeline</h5>
+                                    <div class="timeline">
+                                        <div class="timeline-item">
+                                            <div class="timeline-date">
+                                                <%= new Date(order.createdAt).toLocaleString() %>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <strong>Order Placed</strong>
+                                                <p>Order was created by
+                                                    <% var customerName='customer' ; %>
+                                                        <%= customerName %>.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <% if (order.status !=='Pending' ) { %>
+                                            <div class="timeline-item">
+                                                <div class="timeline-date">Updated</div>
+                                                <div class="timeline-content">
+                                                    <strong>Order <%= order.status %></strong>
+                                                    <p>The order status was updated to <%= order.status %>.</p>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Accept Order Modal -->
+        <div class="modal fade" id="acceptOrderModal" tabindex="-1" aria-labelledby="acceptOrderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="acceptOrderModalLabel">Accept Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This will update the status of all items to "Processing".
+                        </div>
+                        <p>Are you sure you want to accept this order?</p>
+                        <form action="/vendor/orders/accept/<%= order._id %>" method="POST" id="acceptOrderForm">
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check me-2"></i> Accept Order
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update All Items Modal -->
+        <div class="modal fade" id="updateAllItemsModal" tabindex="-1" aria-labelledby="updateAllItemsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateAllItemsModalLabel">Update All Items</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This will update the status of all your items in this order at once.
+                        </div>
+                        <form action="/vendor/orders/update-all-items/<%= order._id %>" method="POST"
+                            id="updateAllItemsForm">
+                            <div class="mb-3">
+                                <label for="allItemsStatus" class="form-label"><strong>Select New
+                                        Status</strong></label>
+                                <select class="form-select" id="allItemsStatus" name="status">
+                                    <% for(var i=0; i < orderStatuses.length; i++) { %>
+                                        <option value="<%= orderStatuses[i] %>" <%=(order.status===orderStatuses[i])
+                                            ? 'selected' : '' %>>
+                                            <%= orderStatuses[i] %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-primary" onclick="confirmAllItemsUpdate()">Update
+                                    All Items</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function confirmAllItemsUpdate() {
+                const status = document.getElementById('allItemsStatus').value;
+                if (confirm(`Are you sure you want to update all items to status "${status}"?`)) {
+                    document.getElementById('updateAllItemsForm').submit();
+                }
+            }
+        </script>
+    </body>
+
+</html>

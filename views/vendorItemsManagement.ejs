@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+<body class="vendor-dashboard">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <%- include('./partials/vendor/sidebar.ejs') %>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-boxes me-2"></i>Inventory Management</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal"
+                            data-bs-target="#addItemModal">
+                            <i class="fas fa-plus-circle me-1"></i>Add New Item
+                        </button>
+                        <div class="btn-group me-2">
+                            <a href="/vendor/items/export" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-file-export me-1"></i>Export
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="printItemList">
+                                <i class="fas fa-print me-1"></i>Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories & Items Section -->
+                <%- include('./partials/vendor/categories.ejs') %>
+
+                <footer class="pt-3 mt-4 text-muted border-top">
+                    &copy; 2025 Community Marketplace
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <%- include('./partials/vendor/add-item-modal.ejs') %>
+
+    <!-- Scripts -->
+    <%- include('./partials/vendor/scripts.ejs', {currentPage: 'items' }) %>
+
+    <script>
+        // Print functionality
+        document.getElementById('printItemList').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Order History</h2>
+            <a href="/dashboard" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        <% if (messages && messages.success && messages.success.length> 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= messages.success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <% if (messages && messages.error && messages.error.length> 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= messages.error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0"><i class="fas fa-history text-primary me-2"></i>Completed Orders</h5>
+                            </div>
+                            <div class="card-body">
+                                <% if (orders && orders.length> 0) { %>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Order ID</th>
+                                                    <th>Date</th>
+                                                    <th>Items</th>
+                                                    <th>Total</th>
+                                                    <th>Status</th>
+                                                    <th>Group Order</th>
+                                                    <th class="text-end">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% orders.forEach(order=> { %>
+                                                    <tr>
+                                                        <td><span class="fw-medium">#<%=
+                                                                    order._id.toString().substring(0, 8).toUpperCase()
+                                                                    %></span></td>
+                                                        <td>
+                                                            <i class="far fa-calendar-alt text-muted me-1"></i>
+                                                            <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                class="badge bg-secondary bg-opacity-10 text-secondary">
+                                                                <%= order.items.length %> items
+                                                            </span>
+                                                        </td>
+                                                        <td><span class="fw-bold">₹<%= order.totalAmount.toFixed(2) %>
+                                                                    </span></td>
+                                                        <td>
+                                                            <span class="badge status-badge status-<%= order.status %>">
+                                                                <%= order.status %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <% if (order.isGroupOrder && order.groupOrderId) { %>
+                                                                <span
+                                                                    class="badge bg-info bg-opacity-10 text-info">Group
+                                                                    Order</span>
+                                                                <% } else { %>
+                                                                    <span
+                                                                        class="badge bg-secondary bg-opacity-10 text-secondary">Individual</span>
+                                                                    <% } %>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <a href="/orders/<%= order._id %>"
+                                                                class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-eye me-1"></i> View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="alert alert-info bg-info bg-opacity-10 border-0">
+                                            <i class="fas fa-info-circle me-2"></i> You don't have any completed orders
+                                            in your history.
+                                            <a href="/orders" class="alert-link">View current orders</a> or <a
+                                                href="/items" class="alert-link">browse items</a> to shop.
+                                        </div>
+                                        <% } %>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="/orders" class="btn btn-primary">
+                                <i class="fas fa-box me-2"></i> View Current Orders
+                            </a>
+                            <a href="/items" class="btn btn-accent ms-2">
+                                <i class="fas fa-shopping-bag me-2"></i> Continue Shopping
+                            </a>
+                        </div>
+    </div>
+
+    <%- include('partials/footer') %>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <body class="vendor-dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include('./partials/vendor/sidebar.ejs') %>
+
+                    <!-- Main Content -->
+                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                        <!-- Page Header -->
+                        <div
+                            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                            <h1 class="h2"><i class="fas fa-tachometer-alt me-2"></i>Vendor Dashboard</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal"
+                                    data-bs-target="#addItemModal">
+                                    <i class="fas fa-plus-circle me-1"></i>Add New Item
+                                </button>
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        id="refreshDashboard">
+                                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="printDashboard">
+                                        <i class="fas fa-print me-1"></i>Print
+                                    </button>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-calendar me-1"></i>This Week
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="#">Today</a></li>
+                                        <li><a class="dropdown-item" href="#">This Week</a></li>
+                                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions Section -->
+                        <%- include('./partials/vendor/quick-actions.ejs') %>
+
+                            <!-- Featured Items Section -->
+                            <%- include('./partials/vendor/featured-items.ejs') %>
+
+                                <!-- New Arrivals Section -->
+                                <%- include('./partials/vendor/new-arrivals.ejs') %>
+
+                                    <!-- Low Stock Alert Section -->
+                                    <%- include('./partials/vendor/low-stock.ejs') %>
+
+                                        <!-- Best Sellers Section -->
+                                        <%- include('./partials/vendor/best-sellers.ejs') %>
+
+                                            <!-- Discounted Items Section -->
+                                            <%- include('./partials/vendor/discounted-items.ejs') %>
+
+                                                <div class="row">
+                                                    <div class="col-12 mb-4">
+                                                        <!-- Categories & Items Section (Full Width) -->
+                                                        <%- include('./partials/vendor/categories.ejs') %>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Recent Orders Section (Moved) -->
+                                                <div class="row">
+                                                    <div class="col-12 mb-4">
+                                                        <%- include('./partials/vendor/recent-orders.ejs') %>
+                                                    </div>
+                                                </div>
+
+                                                <footer class="pt-3 mt-4 text-muted border-top">
+                                                    &copy; 2025 Community Marketplace
+                                                </footer>
+                    </main>
+            </div>
+        </div>
+
+        <!-- Add Item Modal -->
+        <%- include('./partials/vendor/add-item-modal.ejs') %>
+
+            <!-- Scripts -->
+            <%- include('./partials/vendor/scripts.ejs', {currentPage: 'dashboard' }) %>
+    </body>
+
+</html>

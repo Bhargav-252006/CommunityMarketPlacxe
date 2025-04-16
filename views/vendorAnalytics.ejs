@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include('./partials/vendor/sidebar.ejs') %>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9 col-lg-10 main-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Analytics Dashboard</h2>
+                            <div>
+                                <select class="form-select form-select-sm" id="timeRange">
+                                    <option value="7">Last 7 days</option>
+                                    <option value="30" selected>Last 30 days</option>
+                                    <option value="90">Last 90 days</option>
+                                    <option value="365">Last year</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <% if (totalOrders> 0) { %>
+                            <!-- Summary Stats -->
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="stats-card">
+                                        <i class="fas fa-dollar-sign stats-icon"></i>
+                                        <div class="stats-value">₹<%= totalRevenue.toFixed(2) %>
+                                        </div>
+                                        <div class="stats-label">Total Revenue</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stats-card">
+                                        <i class="fas fa-shopping-cart stats-icon"></i>
+                                        <div class="stats-value">
+                                            <%= totalOrders %>
+                                        </div>
+                                        <div class="stats-label">Total Orders</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stats-card">
+                                        <i class="fas fa-box stats-icon"></i>
+                                        <div class="stats-value">
+                                            <%= itemSoldCount %>
+                                        </div>
+                                        <div class="stats-label">Items Sold</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stats-card">
+                                        <i class="fas fa-money-bill-wave stats-icon"></i>
+                                        <div class="stats-value">₹<%= averageOrderValue.toFixed(2) %>
+                                        </div>
+                                        <div class="stats-label">Avg. Order Value</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Revenue Chart -->
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Revenue Over Time</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-container">
+                                                <canvas id="revenueChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Top Selling Items -->
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Top Selling Items</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <% if (topSellingItems.length> 0) { %>
+                                                <% topSellingItems.forEach((item, index)=> { %>
+                                                    <div class="top-item">
+                                                        <div class="top-item-rank">#<%= index + 1 %>
+                                                        </div>
+                                                        <div class="top-item-details">
+                                                            <div class="top-item-name">
+                                                                <%= item.itemName %>
+                                                            </div>
+                                                            <div class="top-item-meta">
+                                                                <span class="top-item-sales">
+                                                                    <%= item.count %> sold
+                                                                </span>
+                                                                <span class="top-item-revenue">₹<%=
+                                                                        item.revenue.toFixed(2) %>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <p class="text-center text-muted">No items sold yet.</p>
+                                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <!-- Sales by Category -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Sales by Category</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-container">
+                                                <canvas id="categoriesChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Business Insights -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Business Insights</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="insights-card p-3 mb-3">
+                                                <h6 class="insights-title"><i class="fas fa-lightbulb me-2"></i>Revenue
+                                                    Growth
+                                                </h6>
+                                                <p class="mb-0">Your revenue has increased compared to the previous
+                                                    period. Keep
+                                                    up the good work!</p>
+                                            </div>
+
+                                            <% if (categorySalesArray.length> 0) { %>
+                                                <div class="insights-card p-3 mb-3">
+                                                    <h6 class="insights-title"><i class="fas fa-tag me-2"></i>Top
+                                                        Category</h6>
+                                                    <p class="mb-0">Your best performing category is <strong>
+                                                            <%= categorySalesArray[0].category %>
+                                                        </strong> with ₹<%= categorySalesArray[0].revenue.toFixed(2) %>
+                                                            in
+                                                            sales.</p>
+                                                </div>
+                                                <% } %>
+
+                                                    <% if (topSellingItems.length> 0) { %>
+                                                        <div class="insights-card p-3">
+                                                            <h6 class="insights-title"><i
+                                                                    class="fas fa-box me-2"></i>Popular
+                                                                Item</h6>
+                                                            <p class="mb-0">Your top selling item is <strong>
+                                                                    <%= topSellingItems[0].itemName %>
+                                                                </strong> with <%= topSellingItems[0].count %> units
+                                                                    sold.</p>
+                                                        </div>
+                                                        <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } else { %>
+                                <!-- Empty State -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="empty-state">
+                                            <i class="fas fa-chart-line"></i>
+                                            <h4 class="mt-3">No Analytics Data Available</h4>
+                                            <p class="text-muted">You haven't received any orders yet. Analytics will
+                                                appear
+                                                here once customers start purchasing your items.</p>
+                                            <a href="/vendor/items" class="btn btn-primary mt-3">
+                                                <i class="fas fa-box me-2"></i>Manage Your Items
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                    </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        // Initialize charts if data is available
+        <% if (totalOrders > 0) { %>
+            // Revenue Over Time Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                const dateLabels = <%= dateLabels %>;
+                const dateData = <%= dateData %>;
+
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: dateLabels,
+                        datasets: [{
+                            label: 'Revenue (₹)',
+                            data: dateData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function (value) {
+                                        return '₹' + value;
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxTicksLimit: 10
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return '₹' + context.parsed.y.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Categories Chart
+                const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+                const categoryLabels = [<% categorySalesArray.forEach((cat, index) => { %> '<%= cat.category %>' <%= index < categorySalesArray.length - 1 ? ',' : '' %><% }); %>];
+                const categoryData = [<% categorySalesArray.forEach((cat, index) => { %><%= cat.revenue %><%= index < categorySalesArray.length - 1 ? ',' : '' %><% }); %>];
+                const backgroundColors = [
+                    '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b',
+                    '#84cc16', '#06b6d4', '#f43f5e', '#6366f1', '#14b8a6'
+                ];
+
+                new Chart(categoriesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categoryLabels,
+                        datasets: [{
+                            data: categoryData,
+                            backgroundColor: backgroundColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    boxWidth: 15,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((acc, data) => acc + data, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `₹${value.toFixed(2)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+        <% } %>
+
+                // Time range filter
+                document.getElementById('timeRange').addEventListener('change', function () {
+                    // This would normally reload data based on the selected range
+                    console.log('Selected time range:', this.value);
+                    // In a real implementation, this would make an AJAX call to fetch data for the selected range
+                });
+        </script>
+    </body>
+
+</html>

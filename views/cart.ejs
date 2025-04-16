@@ -1,0 +1,102 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <h2>Your Shopping Cart</h2>
+
+        <!-- Flash Messages -->
+        <% if (messages && messages.success && messages.success.length> 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= messages.success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <% if (messages && messages.error && messages.error.length> 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= messages.error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+
+                        <% if (cart.items.length===0) { %>
+                            <div class="alert alert-info">
+                                Your cart is empty. <a href="/items">Browse items</a> to add something.
+                            </div>
+                            <% } else { %>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Subtotal</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% cart.items.forEach(item=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= item.itemId ? item.itemId.itemName : 'Item not available' %>
+                                                    </td>
+                                                    <td>₹<%= item.price.toFixed(2) %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.quantity %>
+                                                    </td>
+                                                    <td>₹<%= (item.price * item.quantity).toFixed(2) %>
+                                                    </td>
+                                                    <td>
+                                                        <% if (item.itemId) { %>
+                                                        <form action="/cart/remove/<%= item.itemId._id %>" method="POST"
+                                                            style="display: inline;">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-sm">Remove</button>
+                                                        </form>
+                                                        <% } else { %>
+                                                        <span class="text-muted">Cannot remove</span>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                                                <td><strong>₹<%= cart.totalAmount.toFixed(2) %></strong></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="card-footer bg-white border-top-0 pb-4">
+                                    <div class="row justify-content-center">
+                                        <div class="col-12 text-center">
+                                            <% if (cart.items.length> 0) { %>
+                                                <% if (typeof isAdmin !=='undefined' && isAdmin) { %>
+                                                    <a href="/cart/place-order"
+                                                        class="btn btn-primary btn-lg px-5 rounded-pill">
+                                                        <i class="fas fa-shopping-bag me-2"></i>Place Order
+                                                    </a>
+                                                    <% } else { %>
+                                                        <div class="alert alert-info mb-3" role="alert">
+                                                            <i class="fas fa-info-circle me-2"></i> Your items have been
+                                                            added to the community cart.
+                                                            The community admin will review and place the final order.
+                                                        </div>
+                                                        <% } %>
+                                                            <% } %>
+                                                                <a href="/dashboard"
+                                                                    class="btn btn-outline-secondary mt-2 rounded-pill">
+                                                                    <i class="fas fa-arrow-left me-2"></i>Continue
+                                                                    Shopping
+                                                                </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+    </div>
+
+    <%- include('partials/footer') %>

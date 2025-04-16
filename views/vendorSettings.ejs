@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/vendor/head.ejs') %>
+
+    <style>
+        /* Enhanced styles for the settings page */
+        body.vendor-settings {
+            background-color: #f8f9fa;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.75rem;
+            display: inline-block;
+        }
+
+        .settings-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        /* Navigation styling */
+        .settings-nav .nav-link {
+            padding: 1rem 1.2rem;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: #495057;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .settings-nav .nav-link:hover {
+            background-color: #e9ecef;
+            color: #212529;
+            transform: translateX(3px);
+        }
+
+        .settings-nav .nav-link.active {
+            background-color: #e7f2fd;
+            color: #3498db;
+            border-left: 3px solid #3498db;
+            font-weight: 600;
+        }
+
+        .settings-nav .nav-link i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Tab content styling */
+        .tab-pane {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-pane h4 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Form styling */
+        .form-label {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #dbe3e9;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.1);
+            background-color: #fff;
+        }
+
+        .form-text {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Profile image styling */
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 1rem;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #f8f9fa;
+            border: 3px solid #fff;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-label:hover {
+            background-color: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .image-upload {
+            display: none;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Section dividers */
+        .section-divider {
+            margin: 25px 0;
+            border-top: 1px solid #eaeef3;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Switch styling */
+        .form-switch {
+            padding-left: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-switch .form-check-input {
+            width: 2.5rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .form-check-label {
+            font-weight: 500;
+        }
+
+        /* Card styling */
+        .settings-inner-card {
+            border: 1px solid #eaeef3;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .settings-inner-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .settings-inner-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeef3;
+            padding: 1rem 1.5rem;
+        }
+
+        .settings-inner-card .card-header h5 {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .settings-inner-card .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Alert styling */
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+
+    <body class="vendor-settings">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <%- include('./partials/vendor/sidebar.ejs') %>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9 col-lg-10 main-content">
+                        <h2 class="page-title">Account Settings</h2>
+
+                        <!-- Alert Messages -->
+                        <% if (successMessage) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <%= successMessage %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                            <% } %>
+
+                                <% if (errorMessage) { %>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        <%= errorMessage %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <% } %>
+
+                                        <div class="card settings-card">
+                                            <div class="card-body p-0">
+                                                <div class="row g-0">
+                                                    <div class="col-md-3 border-end">
+                                                        <div class="settings-nav nav flex-column nav-pills p-4"
+                                                            id="v-pills-tab" role="tablist">
+                                                            <a class="nav-link active" id="profile-tab"
+                                                                data-bs-toggle="pill" href="#profile" role="tab">
+                                                                <i class="fas fa-user me-2"></i> Profile
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <div class="tab-content p-4" id="v-pills-tabContent">
+                                                            <!-- Profile Tab -->
+                                                            <div class="tab-pane fade show active" id="profile"
+                                                                role="tabpanel">
+                                                                <h4><i
+                                                                        class="fas fa-user-circle me-2 text-primary"></i>Profile
+                                                                    Information</h4>
+                                                                <form action="/vendor/settings/profile" method="POST"
+                                                                    enctype="multipart/form-data">
+                                                                    <div
+                                                                        class="d-flex flex-column align-items-center mb-4">
+                                                                        <div class="profile-image-container">
+                                                                            <img src="<%= vendor.profileImage || '/images/default-profile.jpg' %>"
+                                                                                alt="Profile" class="profile-image"
+                                                                                id="profilePreview">
+                                                                            <label for="profileImage"
+                                                                                class="image-upload-label">
+                                                                                <i class="fas fa-camera"></i>
+                                                                            </label>
+                                                                            <input type="file" name="profileImage"
+                                                                                id="profileImage" class="image-upload"
+                                                                                accept="image/*">
+                                                                        </div>
+                                                                        <small class="text-muted mt-2">
+                                                                            <i class="fas fa-info-circle me-1"></i>
+                                                                            Click the camera icon to change your profile
+                                                                            image
+                                                                        </small>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 mb-4">
+                                                                            <label for="businessName"
+                                                                                class="form-label">
+                                                                                <i
+                                                                                    class="fas fa-store me-2 text-primary"></i>Business
+                                                                                Name
+                                                                            </label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="businessName" name="businessName"
+                                                                                value="<%= vendor.businessName %>"
+                                                                                required>
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-4">
+                                                                            <label for="email" class="form-label">
+                                                                                <i
+                                                                                    class="fas fa-envelope me-2 text-primary"></i>Email
+                                                                                Address
+                                                                            </label>
+                                                                            <input type="email" class="form-control"
+                                                                                id="email" name="email"
+                                                                                value="<%= vendor.email %>" required>
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-4">
+                                                                            <label for="phone" class="form-label">
+                                                                                <i
+                                                                                    class="fas fa-phone me-2 text-primary"></i>Phone
+                                                                                Number
+                                                                            </label>
+                                                                            <input type="tel" class="form-control"
+                                                                                id="phone" name="phone"
+                                                                                value="<%= vendor.phone || '' %>"
+                                                                                placeholder="Enter your business phone number">
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-4">
+                                                                            <label for="address" class="form-label">
+                                                                                <i
+                                                                                    class="fas fa-map-marker-alt me-2 text-primary"></i>Business
+                                                                                Address
+                                                                            </label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="address" name="address"
+                                                                                value="<%= vendor.address || '' %>"
+                                                                                placeholder="Enter your business address">
+                                                                        </div>
+                                                                        <div class="col-12 mb-4">
+                                                                            <label for="description" class="form-label">
+                                                                                <i
+                                                                                    class="fas fa-align-left me-2 text-primary"></i>Business
+                                                                                Description
+                                                                            </label>
+                                                                            <textarea class="form-control"
+                                                                                id="description" name="description"
+                                                                                rows="4"
+                                                                                placeholder="Describe what your business offers..."><%= vendor.description || '' %></textarea>
+                                                                            <div class="form-text">
+                                                                                <i class="fas fa-lightbulb me-1"></i>
+                                                                                A good description helps customers
+                                                                                understand your business values and
+                                                                                products.
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div
+                                                                        class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            <i class="fas fa-save me-2"></i>Save Profile
+                                                                            Changes
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Ensure profile tab is shown by default when the page loads
+            document.addEventListener('DOMContentLoaded', function () {
+                // Activate the profile tab
+                const profileTab = document.getElementById('profile-tab');
+                const profilePane = document.getElementById('profile');
+
+                if (profileTab && profilePane) {
+                    // Create Bootstrap tab instances
+                    const tab = new bootstrap.Tab(profileTab);
+                    tab.show();
+
+                    // Also ensure the classes are properly set
+                    document.querySelectorAll('.nav-link').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.remove('show', 'active');
+                    });
+
+                    profileTab.classList.add('active');
+                    profilePane.classList.add('show', 'active');
+                }
+            });
+
+            // Preview profile image before upload
+            const profileImage = document.getElementById('profileImage');
+            const profilePreview = document.getElementById('profilePreview');
+
+            if (profileImage && profilePreview) {
+                profileImage.addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            profilePreview.src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Password strength validation
+            const newPassword = document.getElementById('newPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+
+            if (newPassword && confirmPassword) {
+                confirmPassword.addEventListener('input', function () {
+                    if (this.value !== newPassword.value) {
+                        this.setCustomValidity('Passwords do not match');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+
+                newPassword.addEventListener('input', function () {
+                    if (confirmPassword.value !== '' && confirmPassword.value !== this.value) {
+                        confirmPassword.setCustomValidity('Passwords do not match');
+                    } else {
+                        confirmPassword.setCustomValidity('');
+                    }
+                });
+            }
+
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function () {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        </script>
+    </body>
+
+</html>

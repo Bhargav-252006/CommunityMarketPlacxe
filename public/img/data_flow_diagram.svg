@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background grid -->
+    <defs>
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(200,200,200,0.2)" stroke-width="1"/>
+        </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)" />
+    
+    <!-- Title -->
+    <rect x="200" y="20" width="500" height="60" rx="5" ry="5" fill="#4a90e2" stroke="#2c3e50" stroke-width="2"/>
+    <text x="450" y="60" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="white">Data Flow Diagram</text>
+    
+    <!-- Start node -->
+    <ellipse cx="450" cy="120" rx="70" ry="30" fill="#ff6b6b" stroke="#333" stroke-width="2"/>
+    <text x="450" y="125" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">start</text>
+    
+    <!-- Process 1: User Login/Register -->
+    <rect x="350" y="180" width="200" height="40" rx="5" ry="5" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="450" y="205" font-family="Arial" font-size="14" text-anchor="middle">1.0</text>
+    <rect x="350" y="220" width="200" height="25" rx="0" ry="0" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="450" y="237" font-family="Arial" font-size="12" text-anchor="middle">User Login/Register</text>
+    
+    <!-- Process Branches -->
+    <rect x="150" y="300" width="200" height="40" rx="5" ry="5" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="250" y="325" font-family="Arial" font-size="14" text-anchor="middle">1.1</text>
+    <rect x="150" y="340" width="200" height="25" rx="0" ry="0" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="250" y="357" font-family="Arial" font-size="12" text-anchor="middle">Community Member Flow</text>
+    
+    <rect x="375" y="300" width="150" height="40" rx="5" ry="5" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="450" y="325" font-family="Arial" font-size="14" text-anchor="middle">1.2</text>
+    <rect x="375" y="340" width="150" height="25" rx="0" ry="0" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="450" y="357" font-family="Arial" font-size="12" text-anchor="middle">Admin Flow</text>
+    
+    <rect x="550" y="300" width="200" height="40" rx="5" ry="5" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="650" y="325" font-family="Arial" font-size="14" text-anchor="middle">1.3</text>
+    <rect x="550" y="340" width="200" height="25" rx="0" ry="0" fill="#ffe066" stroke="#333" stroke-width="2"/>
+    <text x="650" y="357" font-family="Arial" font-size="12" text-anchor="middle">Vendor Flow</text>
+    
+    <!-- Database -->
+    <rect x="375" y="400" width="150" height="40" rx="5" ry="5" fill="#a9e34b" stroke="#333" stroke-width="2"/>
+    <text x="450" y="425" font-family="Arial" font-size="14" text-anchor="middle">2.0</text>
+    <rect x="375" y="440" width="150" height="25" rx="0" ry="0" fill="#a9e34b" stroke="#333" stroke-width="2"/>
+    <text x="450" y="457" font-family="Arial" font-size="12" text-anchor="middle">MongoDB Database</text>
+    
+    <!-- Browse Items -->
+    <rect x="150" y="400" width="200" height="40" rx="5" ry="5" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="250" y="425" font-family="Arial" font-size="14" text-anchor="middle">3.0</text>
+    <rect x="150" y="440" width="200" height="25" rx="0" ry="0" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="250" y="457" font-family="Arial" font-size="12" text-anchor="middle">Browse Available Items</text>
+    
+    <!-- Manage Listings -->
+    <rect x="550" y="400" width="200" height="40" rx="5" ry="5" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="650" y="425" font-family="Arial" font-size="14" text-anchor="middle">4.0</text>
+    <rect x="550" y="440" width="200" height="25" rx="0" ry="0" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="650" y="457" font-family="Arial" font-size="12" text-anchor="middle">Manage Item Listings</text>
+    
+    <!-- Get User Data -->
+    <rect x="150" y="500" width="200" height="40" rx="5" ry="5" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="250" y="525" font-family="Arial" font-size="14" text-anchor="middle">4.1</text>
+    <rect x="150" y="540" width="200" height="25" rx="0" ry="0" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="250" y="557" font-family="Arial" font-size="12" text-anchor="middle">Add Items to Cart</text>
+    
+    <!-- Cart Management -->
+    <rect x="150" y="600" width="200" height="40" rx="5" ry="5" fill="#ce93d8" stroke="#333" stroke-width="2"/>
+    <text x="250" y="625" font-family="Arial" font-size="14" text-anchor="middle">5.0</text>
+    <rect x="150" y="640" width="200" height="25" rx="0" ry="0" fill="#ce93d8" stroke="#333" stroke-width="2"/>
+    <text x="250" y="657" font-family="Arial" font-size="12" text-anchor="middle">Chat with Vendor</text>
+    
+    <!-- Payment Process -->
+    <rect x="375" y="600" width="150" height="40" rx="5" ry="5" fill="#ce93d8" stroke="#333" stroke-width="2"/>
+    <text x="450" y="625" font-family="Arial" font-size="14" text-anchor="middle">6.0</text>
+    <rect x="375" y="640" width="150" height="25" rx="0" ry="0" fill="#ce93d8" stroke="#333" stroke-width="2"/>
+    <text x="450" y="657" font-family="Arial" font-size="12" text-anchor="middle">Payment</text>
+    
+    <!-- Order Fulfillment -->
+    <rect x="550" y="600" width="200" height="40" rx="5" ry="5" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="650" y="625" font-family="Arial" font-size="14" text-anchor="middle">7.0</text>
+    <rect x="550" y="640" width="200" height="25" rx="0" ry="0" fill="#ff922b" stroke="#333" stroke-width="2"/>
+    <text x="650" y="657" font-family="Arial" font-size="12" text-anchor="middle">Order Fulfillment</text>
+    
+    <!-- End node -->
+    <ellipse cx="450" cy="700" rx="70" ry="30" fill="#a9e34b" stroke="#333" stroke-width="2"/>
+    <text x="450" y="705" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">end</text>
+    
+    <!-- Connections -->
+    <!-- Start to Login/Register -->
+    <line x1="450" y1="150" x2="450" y2="180" stroke="#333" stroke-width="1.5" />
+    <polygon points="450,180 445,170 455,170" fill="#333" />
+    
+    <!-- Login/Register to user flows -->
+    <line x1="450" y1="245" x2="250" y2="300" stroke="#333" stroke-width="1.5" />
+    <polygon points="250,300 256,292 260,302" fill="#333" />
+    
+    <line x1="450" y1="245" x2="450" y2="300" stroke="#333" stroke-width="1.5" />
+    <polygon points="450,300 445,290 455,290" fill="#333" />
+    
+    <line x1="450" y1="245" x2="650" y2="300" stroke="#333" stroke-width="1.5" />
+    <polygon points="650,300 642,292 644,306" fill="#333" />
+    
+    <!-- Community Member to Browse Items -->
+    <line x1="250" y1="365" x2="250" y2="400" stroke="#333" stroke-width="1.5" />
+    <polygon points="250,400 245,390 255,390" fill="#333" />
+    
+    <!-- Admin to Database -->
+    <line x1="450" y1="365" x2="450" y2="400" stroke="#333" stroke-width="1.5" />
+    <polygon points="450,400 445,390 455,390" fill="#333" />
+    
+    <!-- Vendor to Manage Listings -->
+    <line x1="650" y1="365" x2="650" y2="400" stroke="#333" stroke-width="1.5" />
+    <polygon points="650,400 645,390 655,390" fill="#333" />
+    
+    <!-- Browse Items to Add to Cart -->
+    <line x1="250" y1="465" x2="250" y2="500" stroke="#333" stroke-width="1.5" />
+    <polygon points="250,500 245,490 255,490" fill="#333" />
+    
+    <!-- Manage Listings to Database -->
+    <line x1="550" y1="420" x2="525" y2="420" stroke="#333" stroke-width="1.5" />
+    <polygon points="525,420 535,415 535,425" fill="#333" />
+    
+    <!-- Database to Browse Items -->
+    <line x1="375" y1="420" x2="350" y2="420" stroke="#333" stroke-width="1.5" />
+    <polygon points="350,420 360,415 360,425" fill="#333" />
+    
+    <!-- Add to Cart to Chat -->
+    <line x1="250" y1="565" x2="250" y2="600" stroke="#333" stroke-width="1.5" />
+    <polygon points="250,600 245,590 255,590" fill="#333" />
+    
+    <!-- Add to Cart to Database -->
+    <line x1="350" y1="520" x2="420" y2="465" stroke="#333" stroke-width="1.5" />
+    <polygon points="420,465 413,471 409,462" fill="#333" />
+    
+    <!-- Chat to Payment -->
+    <line x1="350" y1="620" x2="375" y2="620" stroke="#333" stroke-width="1.5" />
+    <polygon points="375,620 365,615 365,625" fill="#333" />
+    
+    <!-- Payment to Order Fulfillment -->
+    <line x1="525" y1="620" x2="550" y2="620" stroke="#333" stroke-width="1.5" />
+    <polygon points="550,620 540,615 540,625" fill="#333" />
+    
+    <!-- Order Fulfillment to End -->
+    <line x1="650" y1="665" x2="500" y2="685" stroke="#333" stroke-width="1.5" />
+    <polygon points="500,685 508,679 510,690" fill="#333" />
+    
+    <!-- Payment to End -->
+<!-- Payment to End -->
+<line x1="450" y1="665" x2="450" y2="730" stroke="#333" stroke-width="1.5" />
+<polygon points="450,730 445,720 455,720" fill="#333" />
+
+<!-- End Node -->
+<ellipse cx="450" cy="750" rx="40" ry="20" fill="green" stroke="black" stroke-width="2"/>
+<text x="450" y="755" font-size="14" fill="white" text-anchor="middle">End</text>
+</svg> 

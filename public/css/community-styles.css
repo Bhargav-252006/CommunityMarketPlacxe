@@ -1,0 +1,27 @@
+/* Community Styles */
+
+/* Status Badge Styles */
+.badge.status-Pending {
+    background-color: #FED7AA !important;
+    color: #9A3412 !important;
+}
+
+.badge.status-Processing {
+    background-color: #BFDBFE !important;
+    color: #1E40AF !important;
+}
+
+.badge.status-Shipped {
+    background-color: #C7D2FE !important;
+    color: #4338CA !important;
+}
+
+.badge.status-Delivered {
+    background-color: #BBF7D0 !important;
+    color: #15803D !important;
+}
+
+.badge.status-Cancelled {
+    background-color: #FCA5A5 !important;
+    color: #B91C1C !important;
+} 

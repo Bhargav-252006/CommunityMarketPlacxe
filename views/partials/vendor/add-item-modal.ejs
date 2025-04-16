@@ -1,0 +1,78 @@
+<!-- views/partials/vendor/add-item-modal.ejs -->
+<div class="modal fade" id="addItemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/vendor/items/add" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Item Name</label>
+                            <input type="text" class="form-control" name="itemName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                                <option value="Dairy, Bread & Eggs">Dairy, Bread & Eggs</option>
+                                <option value="Cold Drinks & Juices">Cold Drinks & Juices</option>
+                                <option value="Snacks & Munchies">Snacks & Munchies</option>
+                                <option value="Breakfast & Instant Food">Breakfast & Instant Food</option>
+                                <option value="Bakery & Biscuits">Bakery & Biscuits</option>
+                                <option value="Tea, Coffee & Health Drink">Tea, Coffee & Health Drink</option>
+                                <option value="Atta, Rice & Dal">Atta, Rice & Dal</option>
+                                <option value="Masala, Oil & More">Masala, Oil & More</option>
+                                <option value="Cleaning Essentials">Cleaning Essentials</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="itemQuantity" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Unit</label>
+                            <select class="form-select" name="unit" required>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="pcs">Pieces</option>
+                                <option value="l">Liter (L)</option>
+                                <option value="ml">Milliliter (ml)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cost per Unit</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" name="costPerUnit" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Brand</label>
+                            <input type="text" class="form-control" name="brand">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" name="image" accept="image/*">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" class="form-control" name="expiryDate">
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

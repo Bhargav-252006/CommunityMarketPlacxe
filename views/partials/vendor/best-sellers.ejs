@@ -1,0 +1,52 @@
+<!-- views/partials/vendor/best-sellers.ejs -->
+<% if (items && items.length> 0) { %>
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-crown me-2 text-success"></i> Best Sellers</h4>
+            <button class="btn btn-sm btn-outline-primary" onclick="viewAllBestSellers()">View All</button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <% // For demo purposes, we'll use a subset of items %>
+                    <% const bestSellers=items.slice(0, 4); %>
+                        <% bestSellers.forEach(function(item, index) { %>
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="position-relative">
+                                        <% if (item.imageUrl) { %>
+                                            <img src="<%= item.imageUrl %>" alt="<%= item.itemName %>"
+                                                class="card-img-top" style="height: 150px; object-fit: cover;">
+                                            <% } else { %>
+                                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                                                    style="height: 150px;">
+                                                    <i class="fas fa-box fa-3x text-muted"></i>
+                                                </div>
+                                                <% } %>
+                                                    <% if (index===0) { %>
+                                                        <div class="position-absolute top-0 start-0 m-2">
+                                                            <span class="badge bg-success p-2"><i
+                                                                    class="fas fa-trophy"></i> #1 Best Seller</span>
+                                                        </div>
+                                                        <% } %>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">
+                                            <%= item.itemName %>
+                                        </h5>
+                                        <p class="card-text text-success fw-bold">₹<%= item.costPerUnit.toFixed(2) %>
+                                        </p>
+                                        <small class="text-muted mb-2">
+                                            <i class="fas fa-fire text-danger"></i> High demand
+                                        </small>
+                                        <div class="mt-auto">
+                                            <a href="/vendor/items/edit/<%= item._id %>"
+                                                class="btn btn-sm btn-primary w-100">Manage Stock</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+            </div>
+        </div>
+    </div>
+    <% } %>

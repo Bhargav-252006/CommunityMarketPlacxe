@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#146eb4" />
+      <stop offset="100%" stop-color="#ff9900" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#gradient)" />
+  <text x="256" y="300" font-family="Arial, sans-serif" font-size="240" font-weight="bold" text-anchor="middle" fill="white">CM</text>
+</svg> 

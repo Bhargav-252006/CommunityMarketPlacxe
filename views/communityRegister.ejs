@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Registration - Community Marketplace</title>
+    <%- include('partials/favicon') %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff9900; /* Amazon-inspired orange */
+            --secondary-color: #146eb4; /* Amazon-inspired blue */
+            --accent-color: #232f3e; /* Amazon-inspired dark blue/black */
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #6c757d;
+            --success: #007600; /* Amazon-inspired green */
+            --border-color: #ddd;
+            --hover-color: #febd69; /* Amazon-inspired hover orange */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f3f3f3;
+            /* min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center; */
+            margin: 0;
+            padding: 10px;
+            position: relative;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+            margin: 20px auto;
+        }
+
+        .retail-banner {
+            flex: 1;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .retail-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(20, 110, 180, 0.85) 0%, rgba(35, 47, 62, 0.9) 100%);
+            z-index: 0;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+            margin-right: 15px;
+            font-size: 2.7rem;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .retail-banner h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .retail-banner p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-list {
+            margin-top: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1rem;
+        }
+
+        .feature-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .registration-form {
+            flex: 1;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background-color: white;
+            overflow-y: auto;
+            min-width: 320px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-header h2 {
+            color: var(--dark-text);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.1);
+        }
+
+        .form-text {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider::before {
+            margin-right: 10px;
+        }
+
+        .divider::after {
+            margin-left: 10px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .form-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            margin: 0 5px;
+            display: inline-block;
+        }
+
+        .form-footer a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .security-notice {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .security-notice i {
+            color: var(--success);
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .progress {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-color);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .step {
+            font-size: 0.8rem;
+            color: var(--light-text);
+        }
+
+        .step.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .register-container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+
+            .retail-banner,
+            .registration-form {
+                flex: none;
+            }
+
+            .retail-banner {
+                padding: 30px;
+                text-align: center;
+            }
+
+            .registration-form {
+                max-height: none;
+                overflow-y: visible;
+            }
+        }
+
+        /* Fix for registration form responsiveness */
+        @media (max-width: 1366px) {
+            body {
+                padding: 0;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto !important;
+            }
+            
+            .register-container {
+                max-width: 95%;
+                margin: 30px auto;
+                height: auto;
+                flex-direction: column;
+                overflow: visible;
+            }
+            
+            .retail-banner {
+                padding: 20px;
+                min-height: 150px;
+            }
+            
+            .registration-form {
+                max-height: none;
+                padding: 30px 25px;
+                overflow-y: visible;
+                height: auto;
+            }
+
+            .form-group:first-child {
+                margin-top: 20px;
+            }
+        }
+
+        /* Full name field visibility fix */
+        .form-label[for="name"] {
+            font-size: 1.2rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 10px !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
+        input#name {
+            width: 100% !important;
+            display: block !important;
+            margin-bottom: 15px !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            
+            .register-container {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .retail-banner {
+                display: none;
+            }
+            
+            .registration-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="retail-banner">
+            <div class="banner-content">
+                <div class="logo-area">
+                    <div class="logo">
+                        <i class="fas fa-store"></i> Community<span>Market</span>
+                    </div>
+                    <div class="tagline">Your neighborhood marketplace</div>
+                </div>
+                <h1>Join Your Community</h1>
+                <p>Create an account to access your favorite local products, support neighborhood vendors, and enjoy the convenience of community shopping.</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shopping-basket"></i>
+                        </div>
+                        <div class="feature-text">Shop from local vendors</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div class="feature-text">Support your community</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="feature-text">Convenient delivery options</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-percent"></i>
+                        </div>
+                        <div class="feature-text">Exclusive community deals</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="registration-form">
+            <div class="form-header">
+                <h2>Create Account</h2>
+                <p>Join your local community marketplace</p>
+            </div>
+
+            <%- include('partials/messages') %>
+
+            <form action="/community/register" method="POST" id="registrationForm" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required pattern="^.{3,50}$">
+                    <div class="invalid-feedback">Name must be between 3-50 characters.</div>
+                </div>
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" required 
+                           pattern="^[a-zA-Z][a-zA-Z0-9_]{3,15}$">
+                    <div class="invalid-feedback">Username must start with a letter, contain only letters, numbers, and underscores, and be 4-16 characters long.</div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required
+                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                    <div class="invalid-feedback">Please enter a valid email address (e.g., example@domain.com).</div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" class="form-control" required 
+                               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Password must be at least 8 characters and include both letters and numbers.</div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Passwords do not match.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="communityId" class="form-label">Select Community</label>
+                    <select id="communityId" name="communityId" class="form-control" required>
+                        <option value="">-- Select Community --</option>
+                        <% if (locals.communities && communities.length > 0) { %>
+                            <% communities.forEach(function(community) { %>
+                                <option value="<%= community._id %>"><%= community.name %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <div class="invalid-feedback">Please select a community.</div>
+                </div>
+                
+                <div class="terms-check">
+                    <input type="checkbox" id="termsCheck" required>
+                    <label for="termsCheck">I agree to the <a href="#">Terms and Conditions</a></label>
+                    <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+
+            <!-- Add validation script at the end of the file -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('registrationForm');
+                    const password = document.getElementById('password');
+                    const confirmPassword = document.getElementById('confirmPassword');
+                    
+                    // Function to add comprehensive whitespace validation to an input
+                    function addWhitespaceValidation(input) {
+                        if (!input) return;
+                        
+                        // Add input event listener
+                        input.addEventListener('input', function() {
+                            // Check for leading and trailing whitespace
+                            if (this.value.startsWith(' ') || this.value.endsWith(' ')) {
+                                this.setCustomValidity('Input cannot start or end with spaces');
+                                this.classList.add('is-invalid');
+                            // Check for multiple consecutive spaces in the middle of text
+                            } else if (/\s{2,}/.test(this.value)) {
+                                this.setCustomValidity('Input cannot contain consecutive spaces');
+                                this.classList.add('is-invalid');
+                            } else {
+                                this.setCustomValidity('');
+                                if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                                    this.classList.remove('is-invalid');
+                                }
+                            }
+
+                            // Auto-trim the value if it has leading/trailing spaces
+                            if (this.value !== this.value.trim()) {
+                                this.value = this.value.trim();
+                            }
+                        });
+                        
+                        // Add blur event to trim value
+                        input.addEventListener('blur', function() {
+                            this.value = this.value.trim();
+                            
+                            // Recheck validity
+                            if (/\s{2,}/.test(this.value)) {
+                                this.setCustomValidity('Input cannot contain consecutive spaces');
+                                this.classList.add('is-invalid');
+                            } else {
+                                this.setCustomValidity('');
+                                if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                                    this.classList.remove('is-invalid');
+                                }
+                            }
+                        });
+                        
+                        // Initial check on page load
+                        if (input.value) {
+                            if (input.value.startsWith(' ') || input.value.endsWith(' ')) {
+                                input.value = input.value.trim();
+                            }
+                            if (/\s{2,}/.test(input.value)) {
+                                input.setCustomValidity('Input cannot contain consecutive spaces');
+                                input.classList.add('is-invalid');
+                            }
+                        }
+                    }
+                    
+                    // Get all text-based inputs in the form
+                    const textInputs = form.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], textarea');
+                    
+                    // Apply whitespace validation to each input
+                    textInputs.forEach(addWhitespaceValidation);
+                    
+                    // Username validation - specific rules
+                    const username = document.getElementById('username');
+                    if (username) {
+                        username.addEventListener('input', function() {
+                            // Check for spaces anywhere in username
+                            if (/\s/.test(this.value)) {
+                                this.setCustomValidity('Username cannot contain any spaces');
+                                this.classList.add('is-invalid');
+                            } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,15}$/.test(this.value)) {
+                                this.setCustomValidity('Username must start with a letter, contain only letters, numbers, and underscores, and be 4-16 characters long');
+                                this.classList.add('is-invalid');
+                            } else {
+                                this.setCustomValidity('');
+                                if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                                    this.classList.remove('is-invalid');
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Email validation - stronger regex
+                    const email = document.getElementById('email');
+                    if (email) {
+                        email.addEventListener('input', function() {
+                            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                            if (!emailRegex.test(this.value)) {
+                                this.setCustomValidity('Please enter a valid email address');
+                                this.classList.add('is-invalid');
+                            } else {
+                                this.setCustomValidity('');
+                                if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                                    this.classList.remove('is-invalid');
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Validate confirm password
+                    confirmPassword.addEventListener('input', function() {
+                        if (password.value !== confirmPassword.value) {
+                            confirmPassword.setCustomValidity('Passwords do not match');
+                            confirmPassword.classList.add('is-invalid');
+                        } else {
+                            confirmPassword.setCustomValidity('');
+                            if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                                this.classList.remove('is-invalid');
+                            }
+                        }
+                    });
+                    
+                    // Form validation
+                    form.addEventListener('submit', function(event) {
+                        // Check for whitespace issues one more time before submit
+                        let hasValidationError = false;
+                        
+                        textInputs.forEach(input => {
+                            // Trim values before final validation
+                            if (input.value) {
+                                input.value = input.value.trim();
+                            }
+                            
+                            // Check for consecutive spaces
+                            if (/\s{2,}/.test(input.value)) {
+                                input.setCustomValidity('Input cannot contain consecutive spaces');
+                                input.classList.add('is-invalid');
+                                hasValidationError = true;
+                            }
+                            
+                            // For username, no spaces at all
+                            if (input.id === 'username' && /\s/.test(input.value)) {
+                                input.setCustomValidity('Username cannot contain any spaces');
+                                input.classList.add('is-invalid');
+                                hasValidationError = true;
+                            }
+                        });
+                        
+                        // Check password match
+                        if (password.value !== confirmPassword.value) {
+                            confirmPassword.setCustomValidity('Passwords do not match');
+                            confirmPassword.classList.add('is-invalid');
+                            hasValidationError = true;
+                        }
+                        
+                        if (hasValidationError || !form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            form.classList.add('was-validated');
+                        }
+                    });
+                });
+
+                // Toggle password visibility
+                document.getElementById('togglePassword').addEventListener('click', function() {
+                    const passwordInput = document.getElementById('password');
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+                
+                document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+                    const confirmPasswordInput = document.getElementById('confirmPassword');
+                    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            </script>
+
+            <div class="divider">or</div>
+
+            <div class="form-footer">
+                <p>Already have an account?</p>
+                <a href="/community/login"><i class="fas fa-sign-in-alt"></i> Sign in</a>
+                <a href="/vendor/register"><i class="fas fa-store"></i> Register as vendor</a>
+            </div>
+
+            <div class="security-notice">
+                <i class="fas fa-lock"></i>
+                <span>Your information is protected with industry standard encryption</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

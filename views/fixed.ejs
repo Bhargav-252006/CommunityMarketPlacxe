@@ -1,0 +1,21 @@
+<%%  
+// Create an object to organize items by category  
+const itemsByCategory = {};  
+  
+// Group items by category  
+items.forEach(item => {  
+    const category = item.category;  
+    if (!itemsByCategory[category]) {  
+        itemsByCategory[category] = [];  
+    }  
+    itemsByCategory[category].push(item);  
+});  
+  
+// Get unique vendor counts by category  
+const vendorsByCategory = {};  
+Object.keys(itemsByCategory).forEach(category => {  
+    vendorsByCategory[category] = [...new Set(itemsByCategory[category].map(item =>  
+        item.vendorId._id.toString()  
+    ))].length;  
+});  
+%>  

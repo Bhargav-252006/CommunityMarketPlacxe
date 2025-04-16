@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Community - Community Marketplace</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Core Styles */
+        :root {
+            --primary-color: #4e54c8;
+            --secondary-color: #8f94fb;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            background-color: #fff;
+        }
+
+        .create-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .create-header h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .create-header p {
+            color: #6c757d;
+        }
+
+        .form-floating>.form-control {
+            height: calc(3.5rem + 2px);
+            line-height: 1.25;
+        }
+
+        .form-floating>label {
+            padding: 1rem 0.75rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        /* Fix for floating labels with input groups */
+        .input-group.has-validation {
+            position: relative;
+        }
+
+        .input-group.has-validation .form-label {
+            position: absolute;
+            top: -8px;
+            left: 0;
+            z-index: 3;
+            background-color: white;
+            padding: 0 5px;
+            margin-left: 10px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .input-group.has-validation .invalid-feedback {
+            margin-top: 6px;
+        }
+
+        :root {
+            --primary-dark: #3a56d4;
+            --accent-color: #f72585;
+            --text-color: #495057;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e9efff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .create-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .create-sidebar {
+            flex: 1;
+            background: linear-gradient(135deg, #08AEEA 0%, #2AF598 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-sidebar::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .create-sidebar::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .create-sidebar h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .create-sidebar p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .community-benefits {
+            margin-top: 30px;
+        }
+
+        .community-benefits li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .community-benefits i {
+            margin-right: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .create-form {
+            flex: 1.2;
+            padding: 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-floating {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-floating > .form-control {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+            height: calc(3.5rem + 2px);
+        }
+        
+        .form-floating > label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1rem 0.75rem;
+            pointer-events: none;
+            border: 1px solid transparent;
+            transform-origin: 0 0;
+            transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+            color: #6c757d;
+        }
+        
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            opacity: .65;
+            transform: scale(.85) translateY(-0.75rem) translateX(0.15rem);
+            background-color: white;
+            padding: 0 0.5rem;
+            height: auto;
+        }
+        
+        .form-floating .invalid-feedback {
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+            color: #dc3545;
+        }
+        
+        .form-floating .form-text {
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+        }
+
+        .form-section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .form-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .input-group-text {
+            background-color: var(--light-color);
+            border-color: #e0e0e0;
+            color: var(--text-color);
+        }
+
+        .create-footer {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .create-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .create-footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .alert-info {
+            background-color: #e3f2fd;
+            border-color: #bee5eb;
+            color: #0c5460;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .create-container {
+                flex-direction: column;
+                max-width: 700px;
+            }
+
+            .create-sidebar,
+            .create-form {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .create-sidebar,
+            .create-form {
+                padding: 25px 20px;
+            }
+
+            .create-sidebar h1 {
+                font-size: 2rem;
+            }
+
+            .community-benefits li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="create-container">
+        <div class="create-sidebar">
+            <div class="sidebar-content">
+                <h1>Create Your Community</h1>
+                <p>Start your own community marketplace and connect members with local vendors for group purchases.</p>
+
+                <ul class="list-unstyled community-benefits">
+                    <li>
+                        <i class="bi bi-people-fill"></i>
+                        <span>Connect community members easily</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-shop"></i>
+                        <span>Partner with local vendors</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-currency-dollar"></i>
+                        <span>Save with group purchasing power</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-shield-check"></i>
+                        <span>Secure and private platform</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="create-form">
+            <div class="create-header">
+                <h2>Create New Community</h2>
+                <p>Set up your community hub in minutes</p>
+            </div>
+
+            <%- include('partials/messages') %>
+
+                    <form action="/community/create" method="POST" id="createCommunityForm" class="needs-validation" novalidate>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Community Name"
+                                required pattern="^.{3,50}$">
+                            <label for="name">Community Name</label>
+                            <div class="invalid-feedback">Community name must be between 3-50 characters.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="hidden" class="form-control" id="communityId" name="communityId"
+                                value="auto-gen-<%= Date.now() %>">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                A unique Community ID will be automatically generated based on your community name.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control" id="description" name="description" placeholder="Description"
+                                style="height: 100px" required minlength="10" maxlength="500"></textarea>
+                            <label for="description">Description</label>
+                            <div class="form-text">Tell members about your community's purpose and goals</div>
+                            <div class="invalid-feedback">Description must be between 10-500 characters.</div>
+                        </div>
+
+                        <h4 class="form-section-title">
+                            <i class="bi bi-shield-lock me-2"></i>Admin Account Details
+                        </h4>
+                        <p class="text-muted mb-3">This account will have administrator privileges for your community
+                        </p>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" name="username"
+                                placeholder="Admin Username" required pattern="^[a-zA-Z][a-zA-Z0-9_]{3,15}$">
+                            <label for="username">Admin Username</label>
+                            <div class="invalid-feedback">Username must start with a letter, contain only letters, numbers, and underscores, and be 4-16 characters long.</div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Admin Email"
+                                required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                            <label for="email">Admin Email</label>
+                            <div class="invalid-feedback">Please enter a valid email address (e.g., example@domain.com).</div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="password" name="password" 
+                                placeholder="Admin Password" required 
+                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$">
+                            <label for="password">Admin Password</label>
+                            <div class="invalid-feedback">
+                                Password must be at least 8 characters with at least one letter and one number.
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>Password must be at least 8 characters with letters and numbers.
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" id="togglePassword">
+                                    <i class="bi bi-eye"></i> Show Password
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="adminKey" name="adminKey" 
+                                placeholder="Admin Special Key" required pattern="^.{8,}$">
+                            <label for="adminKey">Admin Special Key</label>
+                            <div class="invalid-feedback">
+                                Admin key must be at least 8 characters long and different from your password.
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-shield-lock me-1"></i>This key is crucial for security, different from your password.
+                                <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" id="toggleAdminKey">
+                                    <i class="bi bi-eye"></i> Show Key
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Create Community & Admin Account
+                            </button>
+                        </div>
+
+                        <div class="create-footer mt-4">
+                            <p>
+                                <a href="/community/login">
+                                    <i class="bi bi-arrow-left"></i> Already have a community? Login
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // More reliable toggle function that doesn't touch the DOM structure
+            function setupToggle(buttonId, inputId) {
+                const button = document.getElementById(buttonId);
+                const input = document.getElementById(inputId);
+                const icon = button ? button.querySelector('i') : null;
+                
+                if (button && input && icon) {
+                    button.addEventListener('click', function() {
+                        // Toggle input type
+                        input.type = input.type === 'password' ? 'text' : 'password';
+                        
+                        // Toggle icon and text
+                        if (input.type === 'text') {
+                            icon.className = 'bi bi-eye-slash';
+                            button.textContent = ' Hide ' + (inputId === 'password' ? 'Password' : 'Key');
+                            button.prepend(icon);
+                        } else {
+                            icon.className = 'bi bi-eye';
+                            button.textContent = ' Show ' + (inputId === 'password' ? 'Password' : 'Key');
+                            button.prepend(icon);
+                        }
+                    });
+                } else {
+                    console.error(`Toggle setup failed: button=${!!button}, input=${!!input}, icon=${!!icon}`);
+                }
+            }
+            
+            // Setup toggles
+            setupToggle('togglePassword', 'password');
+            setupToggle('toggleAdminKey', 'adminKey');
+            
+            // Form validation
+            const form = document.getElementById('createCommunityForm');
+            const password = document.getElementById('password');
+            const adminKey = document.getElementById('adminKey');
+            
+            // Function to add comprehensive whitespace validation to an input
+            function addWhitespaceValidation(input) {
+                if (!input) return;
+                
+                // Add input event listener
+                input.addEventListener('input', function() {
+                    // Check for leading and trailing whitespace
+                    if (this.value.startsWith(' ') || this.value.endsWith(' ')) {
+                        this.setCustomValidity('Input cannot start or end with spaces');
+                        this.classList.add('is-invalid');
+                    // Check for multiple consecutive spaces in the middle of text
+                    } else if (/\s{2,}/.test(this.value)) {
+                        this.setCustomValidity('Input cannot contain consecutive spaces');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+
+                    // Auto-trim the value if it has leading/trailing spaces
+                    if (this.value !== this.value.trim()) {
+                        this.value = this.value.trim();
+                    }
+                });
+                
+                // Add blur event to trim value
+                input.addEventListener('blur', function() {
+                    this.value = this.value.trim();
+                    
+                    // Recheck validity
+                    if (/\s{2,}/.test(this.value)) {
+                        this.setCustomValidity('Input cannot contain consecutive spaces');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+                
+                // Initial check on page load
+                if (input.value) {
+                    if (input.value.startsWith(' ') || input.value.endsWith(' ')) {
+                        input.value = input.value.trim();
+                    }
+                    if (/\s{2,}/.test(input.value)) {
+                        input.setCustomValidity('Input cannot contain consecutive spaces');
+                        input.classList.add('is-invalid');
+                    }
+                }
+            }
+            
+            // Get all text-based inputs in the form
+            const textInputs = form.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], textarea');
+            
+            // Apply whitespace validation to each input
+            textInputs.forEach(addWhitespaceValidation);
+            
+            // Add specific validation for username
+            const username = document.getElementById('username');
+            if (username) {
+                username.addEventListener('input', function() {
+                    // Check for spaces anywhere in username
+                    if (/\s/.test(this.value)) {
+                        this.setCustomValidity('Username cannot contain any spaces');
+                        this.classList.add('is-invalid');
+                    } else if (!/^[a-zA-Z][a-zA-Z0-9_]{3,15}$/.test(this.value)) {
+                        this.setCustomValidity('Username must start with a letter, contain only letters, numbers, and underscores, and be 4-16 characters long');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+            }
+            
+            // Email validation - stronger regex
+            const email = document.getElementById('email');
+            if (email) {
+                email.addEventListener('input', function() {
+                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    if (!emailRegex.test(this.value)) {
+                        this.setCustomValidity('Please enter a valid email address');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+            }
+            
+            // Community name validation
+            const communityName = document.getElementById('name');
+            if (communityName) {
+                communityName.addEventListener('input', function() {
+                    if (this.value.length < 3) {
+                        this.setCustomValidity('Community name must be at least 3 characters');
+                        this.classList.add('is-invalid');
+                    } else if (/\s{2,}/.test(this.value)) {
+                        this.setCustomValidity('Community name cannot contain consecutive spaces');
+                        this.classList.add('is-invalid');
+                    } else {
+                        this.setCustomValidity('');
+                        if (this.classList.contains('is-invalid') && this.checkValidity()) {
+                            this.classList.remove('is-invalid');
+                        }
+                    }
+                });
+            }
+            
+            // Function to check key-password collision and provide feedback
+            function checkKeyPasswordCollision() {
+                if (password.value && adminKey.value && password.value === adminKey.value) {
+                    adminKey.setCustomValidity('Admin key must be different from your password');
+                    
+                    // Add visual feedback
+                    adminKey.classList.add('is-invalid');
+                    
+                    // Show specific error message
+                    const feedbackElement = adminKey.parentElement.querySelector('.invalid-feedback');
+                    if (feedbackElement) {
+                        feedbackElement.textContent = 'Admin key cannot be the same as your password for security reasons.';
+                    }
+                    
+                    return false;
+                } else {
+                    adminKey.setCustomValidity('');
+                    
+                    // Remove visual indication if values are different
+                    if (password.value !== adminKey.value) {
+                        adminKey.classList.remove('is-invalid');
+                        
+                        // Reset error message
+                        const feedbackElement = adminKey.parentElement.querySelector('.invalid-feedback');
+                        if (feedbackElement) {
+                            feedbackElement.textContent = 'Admin key must be at least 8 characters long and different from your password.';
+                        }
+                    }
+                    
+                    return true;
+                }
+            }
+            
+            // Validate admin key is different from password
+            adminKey.addEventListener('input', checkKeyPasswordCollision);
+            password.addEventListener('input', checkKeyPasswordCollision);
+            
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    // First trim all input values
+                    textInputs.forEach(input => {
+                        if (input.value) {
+                            input.value = input.value.trim();
+                        }
+                    });
+                    
+                    // Check for validation issues
+                    let hasValidationError = false;
+                    
+                    // Check for consecutive spaces
+                    textInputs.forEach(input => {
+                        if (/\s{2,}/.test(input.value)) {
+                            input.setCustomValidity('Input cannot contain consecutive spaces');
+                            input.classList.add('is-invalid');
+                            hasValidationError = true;
+                        }
+                        
+                        // For username, no spaces at all
+                        if (input.id === 'username' && /\s/.test(input.value)) {
+                            input.setCustomValidity('Username cannot contain any spaces');
+                            input.classList.add('is-invalid');
+                            hasValidationError = true;
+                        }
+                    });
+                    
+                    // Check if admin key and password are the same
+                    if (!checkKeyPasswordCollision()) {
+                        hasValidationError = true;
+                    }
+                    
+                    if (!form.checkValidity() || hasValidationError) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

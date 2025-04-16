@@ -1,0 +1,83 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Orders</h2>
+            <a href="/dashboard" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        <% if (messages && messages.success && messages.success.length> 0) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= messages.success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <% if (messages && messages.error && messages.error.length> 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= messages.error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+
+                        <% if (orders && orders.length> 0) { %>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Items</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Group Order</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% orders.forEach(order=> { %>
+                                            <tr>
+                                                <td>#<%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                                </td>
+                                                <td>
+                                                    <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                </td>
+                                                <td>
+                                                    <%= order.items.length %> items
+                                                </td>
+                                                <td>₹<%= order.totalAmount.toFixed(2) %>
+                                                </td>
+                                                <td>
+                                                    <span class="badge status-badge status-<%= order.status %>">
+                                                        <%= order.status %>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <% if (order.isGroupOrder && order.groupOrderId) { %>
+                                                        <span class="badge bg-info">Group Order</span>
+                                                        <% } else { %>
+                                                            <span class="badge bg-secondary">Individual</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
+                                                    <a href="/orders/<%= order._id %>" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } else { %>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> You haven't placed any orders yet.
+                                    <a href="/items" class="alert-link">Browse items</a> to start shopping.
+                                </div>
+                                <% } %>
+    </div>
+
+    <%- include('partials/footer') %>

@@ -1,0 +1,173 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Group Orders Management</h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#createGroupOrderModal">
+                <i class="fas fa-plus me-2"></i>Create Group Order
+            </button>
+        </div>
+
+        <% if (groupOrders && groupOrders.length> 0) { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Group Order ID</th>
+                            <th>Created By</th>
+                            <th>Date</th>
+                            <th>Orders</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% groupOrders.forEach(groupOrder=> { %>
+                            <tr>
+                                <td>#<%= groupOrder._id.toString().substring(0, 8).toUpperCase() %>
+                                </td>
+                                <td>
+                                    <%= groupOrder.adminId.name %>
+                                </td>
+                                <td>
+                                    <%= new Date(groupOrder.createdAt).toLocaleDateString() %>
+                                </td>
+                                <td>
+                                    <%= groupOrder.orders.length %> orders
+                                </td>
+                                <td>₹<%= groupOrder.totalAmount.toFixed(2) %>
+                                </td>
+                                <td>
+                                    <span class="badge status-badge status-<%= groupOrder.status %>">
+                                        <%= groupOrder.status %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info"
+                                        onclick="viewGroupOrder('<%= groupOrder._id %>')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-primary"
+                                        onclick="updateStatus('<%= groupOrder._id %>')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    No group orders found. Create one by selecting pending orders.
+                </div>
+                <% } %>
+    </div>
+
+    <!-- Create Group Order Modal -->
+    <div class="modal fade" id="createGroupOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Group Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createGroupOrderForm" action="/group-orders/create" method="POST">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (pendingOrders && pendingOrders.length> 0) { %>
+                                        <% pendingOrders.forEach(order=> { %>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="orderIds" value="<%= order._id %>"
+                                                        class="form-check-input">
+                                                </td>
+                                                <td>#<%= order._id.toString().substring(0, 8).toUpperCase() %>
+                                                </td>
+                                                <td>
+                                                    <%= order.customerName %>
+                                                </td>
+                                                <td>₹<%= order.totalAmount.toFixed(2) %>
+                                                </td>
+                                                <td>
+                                                    <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">No pending orders available
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="createGroupOrderForm" class="btn btn-primary">Create Group
+                        Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div class="modal fade" id="updateStatusModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Group Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateStatusForm" method="POST">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="updateStatusForm" class="btn btn-primary">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function viewGroupOrder(id) {
+            window.location.href = `/group-orders/${id}`;
+        }
+
+        function updateStatus(id) {
+            const modal = new bootstrap.Modal(document.getElementById('updateStatusModal'));
+            const form = document.getElementById('updateStatusForm');
+            form.action = `/group-orders/${id}/status`;
+            modal.show();
+        }
+    </script>
+
+    <%- include('partials/footer') %>
