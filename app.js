@@ -4,6 +4,7 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const flash = require('connect-flash');
+const compression = require('compression');
 const { preventCache } = require('./middleware/authMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboard');
@@ -32,11 +33,27 @@ connectDB().catch(err => {
     process.exit(1);
 });
 
+// Trust proxy for secure cookies behind Render's proxy
+app.set('trust proxy', 1);
+
 // Middleware
+
+// Add production optimizations
+const oneYear = 31536000000;
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: process.env.NODE_ENV === 'production' ? oneYear : 0,
+    etag: true,
+    lastModified: true
+}));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Add support for JSON request bodies
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Add compression for faster page loads
+app.use(compression({
+    level: 6, // Compression level (0-9)
+    threshold: 1024 // Only compress responses larger than 1KB
+}));
 
 // Apply cache control middleware to all routes
 app.use(preventCache);
@@ -62,13 +79,14 @@ const sessionOptions = {
         // Remove crypto configuration to use default behavior
         // This will prevent decryption errors with existing sessions
         autoRemove: 'native',
-        touchAfter: 24 * 60 * 60 // 24 hours
+        touchAfter: 24 * 60 * 60, // 24 hours
+        collectionName: 'sessions' // Explicitly name the collection
     }),
     cookie: {
-        maxAge: 1000 * 60 * 60, // 1 hour session
+        maxAge: 1000 * 60 * 60 * 24, // Extend to 24 hours for better user experience
         httpOnly: true, // Prevents client-side JS from reading the cookie
         secure: process.env.NODE_ENV === 'production', // Ensures cookies are only used over HTTPS in production
-        sameSite: 'strict' // Prevents the browser from sending cookies with cross-site requests
+        sameSite: 'lax' // Changed from 'strict' to 'lax' to help with redirects
     }
 };
 
@@ -180,6 +198,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// Add performance optimization script to all pages in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        res.locals.scripts = res.locals.scripts || [];
+        res.locals.scripts.push('/js/performance-optimization.js');
+        next();
+    });
+}
+
 // **Routes**
 app.use(authRoutes);
 app.use(dashboardRoutes);
@@ -282,8 +309,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
-
 // Shared shutdown function for all exit scenarios
 let isShuttingDown = false;
 function shutdown(reason) {
@@ -307,54 +332,58 @@ function shutdown(reason) {
     process.exit(0);
 }
 
-// Function to start server and try alternative ports if the main one is in use
-function startServer(port) {
-    const server = app.listen(port, () => {
-        console.log(`🚀 Server running on http://localhost:${port}`);
-        console.log('Press Ctrl+C to stop the server');
-    }).on('error', (error) => {
-        if (error.code === 'EADDRINUSE') {
-            console.warn(`⚠️ Port ${port} is already in use, trying port ${port + 1}...`);
-            startServer(port + 1);
-        } else {
-            console.error('Server error:', error);
-            shutdown('Server error: ' + error.message);
-        }
-    });
-
-    // Monitor database connection during runtime
-    let dbMonitorInterval = setInterval(async () => {
-        if (mongoose.connection.readyState !== 1) {
-            console.warn('Periodic DB connection check failed - attempting reconnection');
-            try {
-                await connectDB();
-                console.log('Database reconnection successful');
-            } catch (error) {
-                console.error('Database reconnection failed:', error.message);
+// Only start the server directly if not being required by another module (like server.js)
+if (require.main === module) {
+    // Function to start server and try alternative ports if the main one is in use
+    function startServer(port) {
+        const server = app.listen(port, () => {
+            console.log(`🚀 Server running on http://localhost:${port}`);
+            console.log('Press Ctrl+C to stop the server');
+        }).on('error', (error) => {
+            if (error.code === 'EADDRINUSE') {
+                console.warn(`⚠️ Port ${port} is already in use, trying port ${port + 1}...`);
+                startServer(port + 1);
+            } else {
+                console.error('Server error:', error);
+                shutdown('Server error: ' + error.message);
             }
-        }
-    }, 60000); // Check every minute
-
-    // Handle shutdown signals
-    function handleShutdown(signal) {
-        clearInterval(dbMonitorInterval);
-        server.close(() => {
-            console.log('HTTP server closed');
-            shutdown(signal);
         });
+
+        // Monitor database connection during runtime
+        let dbMonitorInterval = setInterval(async () => {
+            if (mongoose.connection.readyState !== 1) {
+                console.warn('Periodic DB connection check failed - attempting reconnection');
+                try {
+                    await connectDB();
+                    console.log('Database reconnection successful');
+                } catch (error) {
+                    console.error('Database reconnection failed:', error.message);
+                }
+            }
+        }, 60000); // Check every minute
+
+        // Handle shutdown signals
+        function handleShutdown(signal) {
+            clearInterval(dbMonitorInterval);
+            server.close(() => {
+                console.log('HTTP server closed');
+                shutdown(signal);
+            });
+        }
+
+        process.on('SIGINT', () => handleShutdown('SIGINT'));
+        process.on('SIGTERM', () => handleShutdown('SIGTERM'));
+
+        return server;
     }
 
-    process.on('SIGINT', () => handleShutdown('SIGINT'));
-    process.on('SIGTERM', () => handleShutdown('SIGTERM'));
-
-    return server;
+    // Start the server on port 3000 by default
+    const PORT = process.env.PORT || 3000;
+    startServer(PORT);
+} else {
+    // If being required as a module (like in server.js), just export the app
+    console.log('App is being required as a module');
 }
 
-// Start the server
-startServer(PORT);
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-    console.error('UNCAUGHT EXCEPTION:', error.stack);
-    shutdown('Uncaught exception: ' + error.message);
-});
+// Export the app for use in other files (like server.js)
+module.exports = app;

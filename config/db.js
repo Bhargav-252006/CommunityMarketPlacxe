@@ -1,14 +1,32 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+// Production optimizations
+if (process.env.NODE_ENV === 'production') {
+    // Log slow queries (taking more than 500ms)
+    mongoose.set('debug', {
+        slowMs: 500,
+        logFn: (collectionName, methodName, ...methodArgs) => {
+            if (methodName.startsWith('find') || methodName === 'aggregate') {
+                console.warn(`[SLOW QUERY] ${collectionName}.${methodName} (>500ms)`);
+            }
+        }
+    });
+
+    // Disable automatic indexing in production
+    mongoose.set('autoIndex', false);
+}
+
 // Connection options for better reliability
 const options = {
-    serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    connectTimeoutMS: 10000, // Connection timeout
+    serverSelectionTimeoutMS: 10000, // Increased timeout for server selection
+    socketTimeoutMS: 60000, // Increased socket timeout
+    connectTimeoutMS: 15000, // Increased connection timeout
     retryWrites: true, // Retry write operations
-    maxPoolSize: 10, // Maximum number of connections in the pool
-    family: 4 // Use IPv4, skip IPv6
+    maxPoolSize: 15, // Increased pool size for production
+    family: 4, // Use IPv4, skip IPv6
+    keepAlive: true, // Keep connections alive
+    autoIndex: false // Don't build indexes in production
 };
 
 const connectDB = async () => {
