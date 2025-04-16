@@ -25,7 +25,6 @@ const options = {
     retryWrites: true, // Retry write operations
     maxPoolSize: 15, // Increased pool size for production
     family: 4, // Use IPv4, skip IPv6
-    keepAlive: true, // Keep connections alive
     autoIndex: false // Don't build indexes in production
 };
 
